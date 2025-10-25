@@ -1,153 +1,106 @@
 <!doctype html>
 <html lang="vi">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>OrionX — Bot Game Discord bởi Team XYRON</title>
-  <meta name="description" content="OrionX — Bot Discord chủ đề game, được phát triển bởi team XYRON. Bot kinh tế, minigame, pet và hệ thống nhiệm vụ giống owo">
-  <link rel="icon" href="data:;base64,iVBORw0KGgo=">
-  <style>
-    :root{
-      --bg:#0f1720;--card:#0b1220;--muted:#9aa4b2;--accent:#6ee7b7;--accent2:#7cc0ff;
-      --glow1:0 0 12px rgba(110,231,183,0.4);
-      --glow2:0 0 18px rgba(124,192,255,0.5);
-    }
-    *{box-sizing:border-box;transition:all .3s ease}
-    body{margin:0;font-family:'Poppins',system-ui,Segoe UI,Roboto,Arial;background:radial-gradient(circle at 30% 20%,#081425,#030712 80%);color:#e6eef6;overflow-x:hidden}
-    .wrap{max-width:1000px;margin:32px auto;padding:20px;animation:fadeIn 1.5s ease}
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>OrionX — Bot Game Discord bởi Team XYRON</title>
+<meta name="description" content="OrionX — Bot Discord chủ đề game, được phát triển bởi team XYRON. Bot kinh tế, minigame, pet và hệ thống nhiệm vụ giống owo">
+<style>
+:root{
+  --bg:#0f1720;--card:#0b1220;--muted:#9aa4b2;--accent:#6ee7b7;--accent2:#7cc0ff;
+}
+*{box-sizing:border-box;transition:all .3s ease}
+body{margin:0;font-family:'Poppins',system-ui,Segoe UI,Roboto,Arial;background:radial-gradient(circle at 30% 20%,#081425,#030712 80%);color:#e6eef6;overflow-x:hidden}
+.wrap{max-width:1000px;margin:32px auto;padding:20px;animation:fadeIn 1.5s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:none}}
+header{display:flex;align-items:center;gap:16px;animation:fadeIn 1s ease}
+.logo{width:72px;height:72px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-weight:700;color:#042;animation:pulseGlow 2.8s infinite ease-in-out}
+@keyframes pulseGlow{0%,100%{box-shadow:0 0 12px rgba(110,231,183,0.4)}50%{box-shadow:0 0 18px rgba(124,192,255,0.5)}}
+h1{margin:0;font-size:28px;letter-spacing:1px;text-shadow:0 0 8px rgba(124,192,255,0.3)}
+p.lead{color:var(--muted);margin:6px 0 0;font-size:15px}
+.hero-meta{display:flex;gap:10px;align-items:center;margin-top:10px}
+.pill{padding:6px 8px;border-radius:999px;background:rgba(255,255,255,0.04);font-size:13px;box-shadow:0 0 12px rgba(110,231,183,0.4)}
 
-    @keyframes fadeIn{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:none}}
-    @keyframes pulseGlow{0%,100%{box-shadow:var(--glow1)}50%{box-shadow:var(--glow2)}}
+.card{background:rgba(255,255,255,0.03);border-radius:12px;padding:16px;margin-top:16px;border:1px solid rgba(255,255,255,0.03)}
+.features{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:12px}
+.feature{padding:12px;border-radius:8px;background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);border:1px solid rgba(255,255,255,0.04);transition:transform .3s ease,box-shadow .3s ease}
+.feature:hover{transform:translateY(-5px) scale(1.02);box-shadow:0 0 20px rgba(124,192,255,0.15)}
 
-    header{display:flex;align-items:center;gap:16px;animation:fadeIn 1s ease}
-    .logo{width:72px;height:72px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-weight:700;color:#042;animation:pulseGlow 2.8s infinite ease-in-out}
-
-    h1{margin:0;font-size:28px;letter-spacing:1px;text-shadow:0 0 8px rgba(124,192,255,0.3)}
-    p.lead{color:var(--muted);margin:6px 0 0;font-size:15px}
-    .hero-meta{display:flex;gap:10px;align-items:center;margin-top:10px}
-    .pill{padding:6px 8px;border-radius:999px;background:rgba(255,255,255,0.04);font-size:13px;box-shadow:var(--glow1)}
-
-    .card{background:rgba(255,255,255,0.03);border-radius:12px;padding:16px;margin-top:16px;border:1px solid rgba(255,255,255,0.03)}
-    .btn{display:inline-block;padding:12px 18px;border-radius:10px;border:0;cursor:pointer;font-weight:600;position:relative;overflow:hidden;isolation:isolate;z-index:1}
-    .btn::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,var(--accent),var(--accent2));opacity:0;transition:.4s;z-index:-1}
-    .btn:hover::before{opacity:1;filter:blur(10px)}
-    .btn:hover{transform:translateY(-2px) scale(1.02)}
-    .btn-invite{background:linear-gradient(90deg,var(--accent),var(--accent2));color:#032;animation:fadeIn 3s infinite alternate ease-in-out}
-    .btn-secondary{background:transparent;border:1px solid rgba(255,255,255,0.08);color:var(--muted)}
-    .btn-secondary:hover{background:rgba(255,255,255,0.05);color:#fff}
-
-    .features{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:12px}
-    .feature{padding:12px;border-radius:8px;background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);border:1px solid rgba(255,255,255,0.04);transition:transform .3s ease,box-shadow .3s ease}
-    .feature:hover{transform:translateY(-5px) scale(1.02);box-shadow:0 0 20px rgba(124,192,255,0.15)}
-
-    .chat-window{height:360px;overflow:auto;padding:12px;border-radius:8px;background:linear-gradient(180deg,rgba(255,255,255,0.01),transparent);border:1px solid rgba(255,255,255,0.03);display:flex;flex-direction:column;gap:8px;margin-top:10px}
-    .chat-input{flex:1;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:inherit}
-    .chat-controls{display:flex;gap:8px;align-items:center;margin-top:6px}
-    .msg-you{align-self:flex-end;background:rgba(255,255,255,0.03);padding:10px;border-radius:10px;max-width:78%}
-    .msg-ai{align-self:flex-start;background:linear-gradient(90deg,var(--accent),var(--accent2));padding:10px;border-radius:10px;color:#022;max-width:78%}
-    footer{margin-top:18px;color:var(--muted);font-size:13px;text-align:center}
-  </style>
+.btn{
+  display:inline-block;padding:12px 18px;border-radius:12px;font-weight:600;position:relative;overflow:hidden;cursor:pointer;color:#022;
+  background:linear-gradient(270deg, #6ee7b7, #7cc0ff, #6ee7b7);
+  background-size:600% 600%;
+  animation: gradientMove 5s ease infinite;
+  border:none;
+  transition:transform .3s ease, box-shadow .3s ease;
+  box-shadow:0 4px 15px rgba(124,192,255,0.4);
+  margin-right:10px;
+}
+.btn::before{
+  content:'';position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(255,255,255,0.15);
+  pointer-events:none;border-radius:12px;filter:blur(4px);animation: shimmer 2s infinite; z-index:0;
+}
+.btn:hover{transform:translateY(-4px) scale(1.08);box-shadow:0 10px 30px rgba(124,192,255,0.7),0 0 15px rgba(110,231,183,0.6);}
+@keyframes gradientMove{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+@keyframes shimmer{0%{transform:translateX(-100%) skewX(-20deg)}50%{transform:translateX(100%) skewX(-20deg)}100%{transform:translateX(-100%) skewX(-20deg)}}
+footer{margin-top:18px;color:var(--muted);font-size:13px;text-align:center}
+</style>
 </head>
 <body>
 <div class="wrap">
-  <header>
-    <div class="logo">OX</div>
-    <div>
-      <h1>OrionX <span class="small muted">— Bot game Discord bởi Team XYRON</span></h1>
-      <p class="lead">Bot chủ đề game, kinh tế và pet — Chất Lượng cao</p>
-      <div class="hero-meta">
-        <div class="pill">Prefix: <code>X</code></div>
-        <div class="pill">Nhà phát triển: Team XYRON</div>
-      </div>
+<header>
+  <div class="logo">OX</div>
+  <div>
+    <h1>OrionX <span class="small muted">— Bot AI Discord bởi Team XYRON</span></h1>
+    <p class="lead">Bot AI, kinh tế và pet — Chất lượng cao</p>
+    <div class="hero-meta">
+      <div class="pill">Prefix: <code>X</code></div>
+      <div class="pill">Server support: <a href="https://discord.gg/3AgHp9CXJP" target="_blank" style="color:#6ee7b7;text-decoration:underline">Tham gia ngay</a></div>
     </div>
-  </header>
+  </div>
+</header>
 
-  <section class="card">
-    <h3>🎮 Giới thiệu</h3>
-    <p class="muted">OrionX mang đến trải nghiệm vui nhộn với minigame, hệ thống tiền ảo, pet, duel, leaderboard và shop cực chi tiết. Tất cả được thiết kế với hiệu ứng và animation sống động.</p>
-    <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;align-items:center">
-      <a class="btn btn-invite" href="https://discord.com/oauth2/authorize?client_id=1416254396303675392&permissions=2048&integration_type=0&scope=bot" target="_blank">Mời OrionX vào server</a>
-      <button class="btn btn-secondary" id="btnCopy">Sao chép link invite</button>
-    </div>
-  </section>
+<section class="card">
+<h3>🎮 Giới thiệu</h3>
+<p class="muted">OrionX mang đến trải nghiệm vui nhộn với hệ thống trò chuyện AI của OpenAI và hệ thống minigame, hệ thống tiền ảo, pet, duel, leaderboard và shop chi tiết. Tất cả được thiết kế với hiệu ứng và animation sống động.</p>
+<div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+  <a href="https://discord.com/oauth2/authorize?client_id=1416254396303675392&permissions=2048&integration_type=0&scope=bot" target="_blank" class="btn">Mời OrionX vào server</a>
+  <button class="btn" id="btnCopy">Sao chép link invite</button>
+</div>
+</section>
 
-  <section class="card">
-    <h3>✨ Tính năng nổi bật</h3>
-    <div class="features">
-      <div class="feature"><strong>🕹️ Minigames</strong><div class="muted">Hunt, fish, duel, gamble — mọi thứ đều có animation phản hồi.</div></div>
-      <div class="feature"><strong>💰 Hệ thống tiền tệ</strong><div class="muted">Shop, daily reward, inventory có hiệu ứng mở popup mượt mà.</div></div>
-      <div class="feature"><strong>🐾 Pets & Items</strong><div class="muted">Giao diện nuôi pet với animation hover và fusion.</div></div>
-      <div class="feature"><strong>📊 Leaderboard</strong><div class="muted">Hiển thị động và update bằng hiệu ứng fade slide.</div></div>
-    </div>
-  </section>
+<section class="card">
+<h3>✨ Tính năng nổi bật</h3>
+<div class="features">
+  <div class="feature"><strong>🤖 Chat AI</strong><div class="muted">Hệ thống trò chuyện AI cực kỳ thông minh có thể trả lời tất cả câu hỏi mà người dùng đưa ra bằng hệ thống OpenAI</div></div>
+  <div class="feature"><strong>💰 Hệ thống tiền tệ</strong><div class="muted">Shop, daily reward, inventory có hiệu ứng mở popup mượt mà.</div></div>
+  <div class="feature"><strong>🐾 Pets & Items</strong><div class="muted">Giao diện nuôi pet với animation hover và fusion.</div></div>
+  <div class="feature"><strong>📊 Leaderboard</strong><div class="muted">Hiển thị động và update bằng hiệu ứng fade slide.</div></div>
+</div>
+</section>
 
-  <section class="card">
-    <h3>🤖 Trò chuyện với AI (OpenAI)</h3>
-    <div id="chatWindow" class="chat-window"></div>
-    <div class="chat-controls">
-      <input id="chatInput" class="chat-input" placeholder="Hỏi AI về OrionX, lệnh, minigame...">
-      <button class="btn btn-invite" id="sendBtn">Gửi</button>
-      <button class="btn btn-secondary" id="clearChat">Xóa</button>
-    </div>
-    <div class="small muted">Chế độ: <strong>AI OpenAI</strong></div>
-  </section>
+<section class="card">
+<h3>💡 Mẹo & Hướng dẫn</h3>
+<ul class="muted">
+  <li>Tag bot để nhận trợ giúp nhanh.</li>
+  <li>Dùng prefix <code>X</code> trước lệnh để bot nhận dạng.</li>
+  <li>Tham gia server support để cập nhật tin tức và hỏi đáp.</li>
+  <li>Khám phá minigame và shop để nhận thưởng hằng ngày.</li>
+  <li>Thử các combo pet và duel để tối đa hóa điểm số.</li>
+</ul>
+</section>
 
-  <footer>
-    OrionX © 2025 — Được phát triển bởi <strong>Team XYRON</strong>. Prefix: <strong>X</strong>.
-  </footer>
+<footer>
+OrionX © 2025 — Được phát triển bởi <strong>Team XYRON</strong>. Prefix: <strong>X</strong>.
+</footer>
 </div>
 
 <script>
-  const chatWindow = document.getElementById('chatWindow');
-  const chatInput = document.getElementById('chatInput');
-  const sendBtn = document.getElementById('sendBtn');
-  const clearBtn = document.getElementById('clearChat');
-
-  let history = [];
-
-  function appendMessage(who, text){
-    const div = document.createElement('div');
-    div.className = who === 'you' ? 'msg-you':'msg-ai';
-    div.textContent = text;
-    chatWindow.appendChild(div);
-    chatWindow.scrollTop = chatWindow.scrollHeight;
-    if(who==='you') history.push({who:'you', text});
-    else history.push({who:'ai', text});
-    if(history.length>20) history.shift();
-  }
-
-  async function sendMessage(){
-    const msg = chatInput.value.trim();
-    if(!msg) return;
-    appendMessage('you', msg);
-    chatInput.value='';
-    appendMessage('ai','AI đang suy nghĩ...');
-    try{
-      const res = await fetch('http://localhost:3000/chat',{
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({message:msg, history})
-      });
-      const data = await res.json();
-      document.querySelectorAll('.msg-ai')[document.querySelectorAll('.msg-ai').length-1].textContent = data.reply;
-      history.push({who:'ai', text:data.reply});
-    }catch(e){
-      document.querySelectorAll('.msg-ai')[document.querySelectorAll('.msg-ai').length-1].textContent = 'Lỗi kết nối server OpenAI.';
-    }
-  }
-
-  sendBtn.addEventListener('click',sendMessage);
-  chatInput.addEventListener('keydown',e=>{if(e.key==='Enter') sendMessage();});
-  clearBtn.addEventListener('click',()=>{chatWindow.innerHTML=''; history=[];});
-
-  document.getElementById('btnCopy').addEventListener('click',()=>{
-    const link='https://discord.com/oauth2/authorize?client_id=1416254396303675392&permissions=2048&integration_type=0&scope=bot';
-    navigator.clipboard.writeText(link);
-    alert('Đã sao chép link invite của OrionX!');
-  });
-
-  // Initial greeting
-  appendMessage('ai','Xin chào! Mình là OrionX trợ lý. Hỏi mình về lệnh, minigame hoặc cách chơi nhé.');
+document.getElementById('btnCopy').addEventListener('click',()=>{
+  const link='https://discord.com/oauth2/authorize?client_id=1416254396303675392&permissions=2048&integration_type=0&scope=bot';
+  navigator.clipboard.writeText(link);
+  alert('✅ Đã sao chép link invite của OrionX!');
+});
 </script>
 </body>
 </html>
