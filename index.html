@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>OrionX — Web (Owo-style)</title>
+  <style>
+    :root{--bg:#0b1020;--card:#0f1724;--accent:#7c3aed;--muted:#94a3b8;--glass:rgba(255,255,255,0.03)}
+    *{box-sizing:border-box;font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,'Helvetica Neue',Arial}
+    body{margin:0;background:linear-gradient(180deg,#05060a 0%,#071029 100%);color:#e6eef8;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+    .container{width:100%;max-width:940px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:12px;padding:18px;box-shadow:0 10px 30px rgba(3,7,18,0.7)}
+    header{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+    .logo{width:56px;height:56px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#06b6d4);display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff}
+    h1{margin:0;font-size:18px}
+    p.lead{margin:0;color:var(--muted);font-size:13px}
+
+    .main{display:grid;grid-template-columns:360px 1fr;gap:14px}
+    .panel{background:var(--card);border-radius:10px;padding:12px}
+
+    .left .controls{display:flex;flex-direction:column;gap:8px}
+    label{font-size:12px;color:var(--muted)}
+    input[type=text], select{width:100%;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:var(--glass);color:inherit}
+    button{padding:8px 12px;border-radius:8px;border:0;background:var(--accent);color:#fff;cursor:pointer}
+    .btn-ghost{background:transparent;border:1px solid rgba(255,255,255,0.04)}
+
+    .chat{display:flex;flex-direction:column;height:520px}
+    .messages{flex:1;overflow:auto;padding:12px;border-radius:8px;background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent)}
+    .msg{margin-bottom:10px;max-width:78%}
+    .from-user{align-self:flex-end;background:linear-gradient(180deg,#1f2937,#0f1724);padding:10px;border-radius:10px}
+    .from-bot{align-self:flex-start;background:rgba(255,255,255,0.03);padding:10px;border-radius:10px}
+
+    .composer{display:flex;gap:8px;margin-top:8px}
+    .composer input{flex:1}
+
+    .help{font-size:13px;color:var(--muted);margin-top:8px}
+    .cmd-list{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+    .cmd{background:rgba(255,255,255,0.02);padding:6px 8px;border-radius:6px;font-size:13px;color:var(--muted)}
+
+    footer{margin-top:12px;color:var(--muted);font-size:12px;text-align:right}
+
+    @media(max-width:880px){.main{grid-template-columns:1fr}.left{order:2}}
+  </style>
+</head>
+<body>
+  <div class="container" role="application">
+    <header>
+      <div class="logo">OX</div>
+      <div>
+        <h1>OrionX — Web demo (Owo-style)</h1>
+        <p class="lead">Giao diện web mô phỏng bot Discord. Các lệnh bắt đầu bằng <code>x</code> — ví dụ: <code>xowo</code>, <code>xbalance</code>.</p>
+      </div>
+    </header>
+
+    <div class="main">
+      <div class="left">
+        <div class="panel controls">
+          <label for="username">Tên người dùng (username)</label>
+          <input id="username" type="text" placeholder="Ví dụ: SangNguyen" />
+          <div style="display:flex;gap:8px;margin-top:8px">
+            <button id="btnRegister">Đăng ký (xregister)</button>
+            <button class="btn-ghost" id="btnReset">Xóa dữ liệu</button>
+          </div>
+
+          <div class="help">
+            <div><strong>Lệnh hỗ trợ (demo):</strong></div>
+            <div class="cmd-list">
+              <div class="cmd">xowo</div>
+              <div class="cmd">xping</div>
+              <div class="cmd">xregister</div>
+              <div class="cmd">xbalance</div>
+              <div class="cmd">xdaily</div>
+              <div class="cmd">xhunt</div>
+            </div>
+            <p style="margin-top:8px">Bạn cũng có thể gõ bất kỳ tin nhắn chứa <code>owo</code> hoặc <code>uwu</code> để xem bot trả lời tự động.</p>
+          </div>
+        </div>
+
+        <div class="panel" style="margin-top:12px">
+          <strong>Trạng thái lưu trữ</strong>
+          <div id="storageInfo" style="margin-top:8px;color:var(--muted)"></div>
+        </div>
+      </div>
+
+      <div class="panel chat">
+        <div class="messages" id="messages" aria-live="polite"></div>
+
+        <div class="composer">
+          <input id="inputMsg" type="text" placeholder="Gõ lệnh hoặc tin nhắn... (vd: xowo, xbalance, xin chao owo)" />
+          <button id="btnSend">Gửi</button>
+        </div>
+      </div>
+    </div>
+
+    <footer>OrionX · Web demo — Lưu bằng localStorage trên máy bạn</footer>
+  </div>
+
+  <script>
+    // ---- Simple localStorage economy model ----
+    const STORAGE_KEY = 'orionx_users_v1';
+
+    function loadUsers(){
+      try{
+        return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+      }catch(e){
+        console.error(e);
+        return {};
+      }
+    }
+    function saveUsers(u){ localStorage.setItem(STORAGE_KEY, JSON.stringify(u)); updateStorageInfo(); }
+
+    function updateStorageInfo(){
+      const users = loadUsers();
+      const count = Object.keys(users).length;
+      document.getElementById('storageInfo').textContent = `${count} user(s) stored in localStorage.`;
+    }
+
+    // create elements
+    const messagesEl = document.getElementById('messages');
+    const input = document.getElementById('inputMsg');
+    const btnSend = document.getElementById('btnSend');
+    const usernameInput = document.getElementById('username');
+    const btnRegister = document.getElementById('btnRegister');
+    const btnReset = document.getElementById('btnReset');
+
+    function addMessage(text, from='bot'){
+      const div = document.createElement('div');
+      div.className = 'msg ' + (from==='user' ? 'from-user' : 'from-bot');
+      div.innerHTML = text.replace(/\n/g,'<br>');
+      messagesEl.appendChild(div);
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+    }
+
+    // commands logic
+    function ensureRegistered(name){
+      if(!name) return {ok:false, msg:'Vui lòng nhập tên người dùng ở ô bên trái.'};
+      const users = loadUsers();
+      if(!users[name]) return {ok:false, msg:'Chưa đăng ký — gõ xregister để đăng ký.'};
+      return {ok:true, users, user:users[name]};
+    }
+
+    function handleCommand(raw, name){
+      const text = raw.trim();
+      const lc = text.toLowerCase();
+
+      // auto-responses for owo/uwu even if not a command
+      if(lc.includes('owo') || lc.includes('uwu')){
+        addMessage('<strong>OrionX:</strong> 👉 UwU What\'s this?');
+      }
+
+      if(!text.startsWith('x') && !text.startsWith('X')) return;
+      const parts = text.slice(1).split(/\s+/);
+      const cmd = parts[0];
+      const args = parts.slice(1);
+
+      if(cmd === 'owo'){
+        addMessage(`<strong>OrionX:</strong> ${name ? name : 'Người dùng'} says owo 🥺👉👈`);
+        return;
+      }
+
+      if(cmd === 'ping'){
+        const latency = Math.floor(Math.random()*200)+20;
+        addMessage(`<strong>OrionX:</strong> Pong! 🏓 ${latency}ms`);
+        return;
+      }
+
+      if(cmd === 'register' || cmd === 'xregister'){
+        if(!name){ addMessage('<strong>OrionX:</strong> Vui lòng điền tên trước rồi nhấn đăng ký.'); return; }
+        const users = loadUsers();
+        if(users[name]){ addMessage('<strong>OrionX:</strong> Tài khoản đã tồn tại.'); return; }
+        users[name] = {balance: 100, lastDaily: 0};
+        saveUsers(users);
+        addMessage(`<strong>OrionX:</strong> Đã đăng ký ${name}. Bắt đầu với 100 credits.`);
+        return;
+      }
+
+      if(cmd === 'balance' || cmd === 'bal' || cmd === 'xbalance'){
+        const ok = ensureRegistered(name);
+        if(!ok.ok){ addMessage(`<strong>OrionX:</strong> ${ok.msg}`); return; }
+        addMessage(`<strong>OrionX:</strong> ${name} có ${ok.user.balance} credits.`);
+        return;
+      }
+
+      if(cmd === 'daily' || cmd === 'xdaily'){
+        const ok = ensureRegistered(name);
+        if(!ok.ok){ addMessage(`<strong>OrionX:</strong> ${ok.msg}`); return; }
+        const now = Date.now();
+        const user = ok.user;
+        const ONE_DAY = 24*60*60*1000;
+        if(now - (user.lastDaily||0) < ONE_DAY){
+          const left = ONE_DAY - (now - user.lastDaily);
+          const hours = Math.floor(left/3600000);
+          const minutes = Math.floor((left%3600000)/60000);
+          addMessage(`<strong>OrionX:</strong> Bạn đã nhận daily rồi. Thời gian còn lại: ${hours}h ${minutes}m`);
+          return;
+        }
+        const gain = Math.floor(Math.random()*150) + 50;
+        user.balance += gain;
+        user.lastDaily = now;
+        const users = ok.users; users[name] = user; saveUsers(users);
+        addMessage(`<strong>OrionX:</strong> Bạn nhận được ${gain} credits! Bây giờ có ${user.balance} credits.`);
+        return;
+      }
+
+      if(cmd === 'hunt' || cmd === 'xhunt'){
+        const ok = ensureRegistered(name);
+        if(!ok.ok){ addMessage(`<strong>OrionX:</strong> ${ok.msg}`); return; }
+        const roll = Math.random();
+        const users = ok.users; const user = ok.user;
+        if(roll < 0.6){ const gain = Math.floor(Math.random()*40)+10; user.balance += gain; users[name]=user; saveUsers(users); addMessage(`<strong>OrionX:</strong> Bạn săn được và kiếm ${gain} credits!`); }
+        else if(roll < 0.9){ const gain = Math.floor(Math.random()*120)+50; user.balance += gain; users[name]=user; saveUsers(users); addMessage(`<strong>OrionX:</strong> Hiếm! Bạn săn được vật phẩm hiếm và nhận ${gain} credits!`); }
+        else{ const loss = Math.floor(Math.random()*30)+5; user.balance = Math.max(0, user.balance - loss); users[name]=user; saveUsers(users); addMessage(`<strong>OrionX:</strong> Bị thất bại! Mất ${loss} credits...`); }
+        return;
+      }
+
+      addMessage(`<strong>OrionX:</strong> Lệnh không rõ: <code>${cmd}</code>. Hỗ trợ: xowo, xping, xregister, xbalance, xdaily, xhunt.`);
+    }
+
+    // UI events
+    btnSend.addEventListener('click', ()=>{
+      const msg = input.value.trim();
+      const name = usernameInput.value.trim();
+      if(!msg) return;
+      addMessage(`<strong>${name || 'Bạn'}:</strong> ${escapeHtml(msg)}`,'user');
+      handleCommand(msg, name);
+      input.value='';
+      input.focus();
+    });
+
+    input.addEventListener('keydown', (e)=>{ if(e.key === 'Enter'){ btnSend.click(); } });
+
+    btnRegister.addEventListener('click', ()=>{
+      const name = usernameInput.value.trim();
+      if(!name){ alert('Vui lòng nhập tên người dùng trước khi đăng ký.'); return; }
+      const users = loadUsers();
+      if(users[name]){ alert('Tài khoản đã tồn tại.'); return; }
+      users[name] = {balance:100, lastDaily:0};
+      saveUsers(users);
+      updateStorageInfo();
+      addMessage(`<strong>OrionX:</strong> Đã đăng ký ${name} — 100 credits.`);
+    });
+
+    btnReset.addEventListener('click', ()=>{
+      if(confirm('Xóa tất cả dữ liệu OrionX trong localStorage?')){ localStorage.removeItem(STORAGE_KEY); updateStorageInfo(); addMessage('<strong>OrionX:</strong> Đã xóa dữ liệu.'); }
+    });
+
+    function escapeHtml(s){ return s.replace(/[&<>]/g, c=> ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])); }
+
+    // init
+    updateStorageInfo();
+    addMessage('<strong>OrionX:</strong> Chào! Điền tên ở bên trái rồi thử lệnh <code>xregister</code> → <code>xbalance</code> → <code>xdaily</code> hoặc gõ tin nhắn chứa <code>owo</code>.');
+  </script>
+</body>
+</html>
