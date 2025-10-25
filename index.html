@@ -1,253 +1,153 @@
 <!doctype html>
 <html lang="vi">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>OrionX — Web (Owo-style)</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>OrionX — Bot Game Discord bởi Team XYRON</title>
+  <meta name="description" content="OrionX — Bot Discord chủ đề game, được phát triển bởi team XYRON. Bot kinh tế, minigame, pet và hệ thống nhiệm vụ giống owo">
+  <link rel="icon" href="data:;base64,iVBORw0KGgo=">
   <style>
-    :root{--bg:#0b1020;--card:#0f1724;--accent:#7c3aed;--muted:#94a3b8;--glass:rgba(255,255,255,0.03)}
-    *{box-sizing:border-box;font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,'Helvetica Neue',Arial}
-    body{margin:0;background:linear-gradient(180deg,#05060a 0%,#071029 100%);color:#e6eef8;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
-    .container{width:100%;max-width:940px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:12px;padding:18px;box-shadow:0 10px 30px rgba(3,7,18,0.7)}
-    header{display:flex;align-items:center;gap:12px;margin-bottom:12px}
-    .logo{width:56px;height:56px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#06b6d4);display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff}
-    h1{margin:0;font-size:18px}
-    p.lead{margin:0;color:var(--muted);font-size:13px}
+    :root{
+      --bg:#0f1720;--card:#0b1220;--muted:#9aa4b2;--accent:#6ee7b7;--accent2:#7cc0ff;
+      --glow1:0 0 12px rgba(110,231,183,0.4);
+      --glow2:0 0 18px rgba(124,192,255,0.5);
+    }
+    *{box-sizing:border-box;transition:all .3s ease}
+    body{margin:0;font-family:'Poppins',system-ui,Segoe UI,Roboto,Arial;background:radial-gradient(circle at 30% 20%,#081425,#030712 80%);color:#e6eef6;overflow-x:hidden}
+    .wrap{max-width:1000px;margin:32px auto;padding:20px;animation:fadeIn 1.5s ease}
 
-    .main{display:grid;grid-template-columns:360px 1fr;gap:14px}
-    .panel{background:var(--card);border-radius:10px;padding:12px}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:none}}
+    @keyframes pulseGlow{0%,100%{box-shadow:var(--glow1)}50%{box-shadow:var(--glow2)}}
 
-    .left .controls{display:flex;flex-direction:column;gap:8px}
-    label{font-size:12px;color:var(--muted)}
-    input[type=text], select{width:100%;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:var(--glass);color:inherit}
-    button{padding:8px 12px;border-radius:8px;border:0;background:var(--accent);color:#fff;cursor:pointer}
-    .btn-ghost{background:transparent;border:1px solid rgba(255,255,255,0.04)}
+    header{display:flex;align-items:center;gap:16px;animation:fadeIn 1s ease}
+    .logo{width:72px;height:72px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-weight:700;color:#042;animation:pulseGlow 2.8s infinite ease-in-out}
 
-    .chat{display:flex;flex-direction:column;height:520px}
-    .messages{flex:1;overflow:auto;padding:12px;border-radius:8px;background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent)}
-    .msg{margin-bottom:10px;max-width:78%}
-    .from-user{align-self:flex-end;background:linear-gradient(180deg,#1f2937,#0f1724);padding:10px;border-radius:10px}
-    .from-bot{align-self:flex-start;background:rgba(255,255,255,0.03);padding:10px;border-radius:10px}
+    h1{margin:0;font-size:28px;letter-spacing:1px;text-shadow:0 0 8px rgba(124,192,255,0.3)}
+    p.lead{color:var(--muted);margin:6px 0 0;font-size:15px}
+    .hero-meta{display:flex;gap:10px;align-items:center;margin-top:10px}
+    .pill{padding:6px 8px;border-radius:999px;background:rgba(255,255,255,0.04);font-size:13px;box-shadow:var(--glow1)}
 
-    .composer{display:flex;gap:8px;margin-top:8px}
-    .composer input{flex:1}
+    .card{background:rgba(255,255,255,0.03);border-radius:12px;padding:16px;margin-top:16px;border:1px solid rgba(255,255,255,0.03)}
+    .btn{display:inline-block;padding:12px 18px;border-radius:10px;border:0;cursor:pointer;font-weight:600;position:relative;overflow:hidden;isolation:isolate;z-index:1}
+    .btn::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,var(--accent),var(--accent2));opacity:0;transition:.4s;z-index:-1}
+    .btn:hover::before{opacity:1;filter:blur(10px)}
+    .btn:hover{transform:translateY(-2px) scale(1.02)}
+    .btn-invite{background:linear-gradient(90deg,var(--accent),var(--accent2));color:#032;animation:fadeIn 3s infinite alternate ease-in-out}
+    .btn-secondary{background:transparent;border:1px solid rgba(255,255,255,0.08);color:var(--muted)}
+    .btn-secondary:hover{background:rgba(255,255,255,0.05);color:#fff}
 
-    .help{font-size:13px;color:var(--muted);margin-top:8px}
-    .cmd-list{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
-    .cmd{background:rgba(255,255,255,0.02);padding:6px 8px;border-radius:6px;font-size:13px;color:var(--muted)}
+    .features{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:12px}
+    .feature{padding:12px;border-radius:8px;background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);border:1px solid rgba(255,255,255,0.04);transition:transform .3s ease,box-shadow .3s ease}
+    .feature:hover{transform:translateY(-5px) scale(1.02);box-shadow:0 0 20px rgba(124,192,255,0.15)}
 
-    footer{margin-top:12px;color:var(--muted);font-size:12px;text-align:right}
-
-    @media(max-width:880px){.main{grid-template-columns:1fr}.left{order:2}}
+    .chat-window{height:360px;overflow:auto;padding:12px;border-radius:8px;background:linear-gradient(180deg,rgba(255,255,255,0.01),transparent);border:1px solid rgba(255,255,255,0.03);display:flex;flex-direction:column;gap:8px;margin-top:10px}
+    .chat-input{flex:1;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:inherit}
+    .chat-controls{display:flex;gap:8px;align-items:center;margin-top:6px}
+    .msg-you{align-self:flex-end;background:rgba(255,255,255,0.03);padding:10px;border-radius:10px;max-width:78%}
+    .msg-ai{align-self:flex-start;background:linear-gradient(90deg,var(--accent),var(--accent2));padding:10px;border-radius:10px;color:#022;max-width:78%}
+    footer{margin-top:18px;color:var(--muted);font-size:13px;text-align:center}
   </style>
 </head>
 <body>
-  <div class="container" role="application">
-    <header>
-      <div class="logo">OX</div>
-      <div>
-        <h1>OrionX — Web demo (Owo-style)</h1>
-        <p class="lead">Giao diện web mô phỏng bot Discord. Các lệnh bắt đầu bằng <code>x</code> — ví dụ: <code>xowo</code>, <code>xbalance</code>.</p>
-      </div>
-    </header>
-
-    <div class="main">
-      <div class="left">
-        <div class="panel controls">
-          <label for="username">Tên người dùng (username)</label>
-          <input id="username" type="text" placeholder="Ví dụ: SangNguyen" />
-          <div style="display:flex;gap:8px;margin-top:8px">
-            <button id="btnRegister">Đăng ký (xregister)</button>
-            <button class="btn-ghost" id="btnReset">Xóa dữ liệu</button>
-          </div>
-
-          <div class="help">
-            <div><strong>Lệnh hỗ trợ (demo):</strong></div>
-            <div class="cmd-list">
-              <div class="cmd">xowo</div>
-              <div class="cmd">xping</div>
-              <div class="cmd">xregister</div>
-              <div class="cmd">xbalance</div>
-              <div class="cmd">xdaily</div>
-              <div class="cmd">xhunt</div>
-            </div>
-            <p style="margin-top:8px">Bạn cũng có thể gõ bất kỳ tin nhắn chứa <code>owo</code> hoặc <code>uwu</code> để xem bot trả lời tự động.</p>
-          </div>
-        </div>
-
-        <div class="panel" style="margin-top:12px">
-          <strong>Trạng thái lưu trữ</strong>
-          <div id="storageInfo" style="margin-top:8px;color:var(--muted)"></div>
-        </div>
-      </div>
-
-      <div class="panel chat">
-        <div class="messages" id="messages" aria-live="polite"></div>
-
-        <div class="composer">
-          <input id="inputMsg" type="text" placeholder="Gõ lệnh hoặc tin nhắn... (vd: xowo, xbalance, xin chao owo)" />
-          <button id="btnSend">Gửi</button>
-        </div>
+<div class="wrap">
+  <header>
+    <div class="logo">OX</div>
+    <div>
+      <h1>OrionX <span class="small muted">— Bot game Discord bởi Team XYRON</span></h1>
+      <p class="lead">Bot chủ đề game, kinh tế và pet — Chất Lượng cao</p>
+      <div class="hero-meta">
+        <div class="pill">Prefix: <code>X</code></div>
+        <div class="pill">Nhà phát triển: Team XYRON</div>
       </div>
     </div>
+  </header>
 
-    <footer>OrionX · Web demo — Lưu bằng localStorage trên máy bạn</footer>
-  </div>
+  <section class="card">
+    <h3>🎮 Giới thiệu</h3>
+    <p class="muted">OrionX mang đến trải nghiệm vui nhộn với minigame, hệ thống tiền ảo, pet, duel, leaderboard và shop cực chi tiết. Tất cả được thiết kế với hiệu ứng và animation sống động.</p>
+    <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+      <a class="btn btn-invite" href="https://discord.com/oauth2/authorize?client_id=1416254396303675392&permissions=2048&integration_type=0&scope=bot" target="_blank">Mời OrionX vào server</a>
+      <button class="btn btn-secondary" id="btnCopy">Sao chép link invite</button>
+    </div>
+  </section>
 
-  <script>
-    // ---- Simple localStorage economy model ----
-    const STORAGE_KEY = 'orionx_users_v1';
+  <section class="card">
+    <h3>✨ Tính năng nổi bật</h3>
+    <div class="features">
+      <div class="feature"><strong>🕹️ Minigames</strong><div class="muted">Hunt, fish, duel, gamble — mọi thứ đều có animation phản hồi.</div></div>
+      <div class="feature"><strong>💰 Hệ thống tiền tệ</strong><div class="muted">Shop, daily reward, inventory có hiệu ứng mở popup mượt mà.</div></div>
+      <div class="feature"><strong>🐾 Pets & Items</strong><div class="muted">Giao diện nuôi pet với animation hover và fusion.</div></div>
+      <div class="feature"><strong>📊 Leaderboard</strong><div class="muted">Hiển thị động và update bằng hiệu ứng fade slide.</div></div>
+    </div>
+  </section>
 
-    function loadUsers(){
-      try{
-        return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
-      }catch(e){
-        console.error(e);
-        return {};
-      }
+  <section class="card">
+    <h3>🤖 Trò chuyện với AI (OpenAI)</h3>
+    <div id="chatWindow" class="chat-window"></div>
+    <div class="chat-controls">
+      <input id="chatInput" class="chat-input" placeholder="Hỏi AI về OrionX, lệnh, minigame...">
+      <button class="btn btn-invite" id="sendBtn">Gửi</button>
+      <button class="btn btn-secondary" id="clearChat">Xóa</button>
+    </div>
+    <div class="small muted">Chế độ: <strong>AI OpenAI</strong></div>
+  </section>
+
+  <footer>
+    OrionX © 2025 — Được phát triển bởi <strong>Team XYRON</strong>. Prefix: <strong>X</strong>.
+  </footer>
+</div>
+
+<script>
+  const chatWindow = document.getElementById('chatWindow');
+  const chatInput = document.getElementById('chatInput');
+  const sendBtn = document.getElementById('sendBtn');
+  const clearBtn = document.getElementById('clearChat');
+
+  let history = [];
+
+  function appendMessage(who, text){
+    const div = document.createElement('div');
+    div.className = who === 'you' ? 'msg-you':'msg-ai';
+    div.textContent = text;
+    chatWindow.appendChild(div);
+    chatWindow.scrollTop = chatWindow.scrollHeight;
+    if(who==='you') history.push({who:'you', text});
+    else history.push({who:'ai', text});
+    if(history.length>20) history.shift();
+  }
+
+  async function sendMessage(){
+    const msg = chatInput.value.trim();
+    if(!msg) return;
+    appendMessage('you', msg);
+    chatInput.value='';
+    appendMessage('ai','AI đang suy nghĩ...');
+    try{
+      const res = await fetch('http://localhost:3000/chat',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({message:msg, history})
+      });
+      const data = await res.json();
+      document.querySelectorAll('.msg-ai')[document.querySelectorAll('.msg-ai').length-1].textContent = data.reply;
+      history.push({who:'ai', text:data.reply});
+    }catch(e){
+      document.querySelectorAll('.msg-ai')[document.querySelectorAll('.msg-ai').length-1].textContent = 'Lỗi kết nối server OpenAI.';
     }
-    function saveUsers(u){ localStorage.setItem(STORAGE_KEY, JSON.stringify(u)); updateStorageInfo(); }
+  }
 
-    function updateStorageInfo(){
-      const users = loadUsers();
-      const count = Object.keys(users).length;
-      document.getElementById('storageInfo').textContent = `${count} user(s) stored in localStorage.`;
-    }
+  sendBtn.addEventListener('click',sendMessage);
+  chatInput.addEventListener('keydown',e=>{if(e.key==='Enter') sendMessage();});
+  clearBtn.addEventListener('click',()=>{chatWindow.innerHTML=''; history=[];});
 
-    // create elements
-    const messagesEl = document.getElementById('messages');
-    const input = document.getElementById('inputMsg');
-    const btnSend = document.getElementById('btnSend');
-    const usernameInput = document.getElementById('username');
-    const btnRegister = document.getElementById('btnRegister');
-    const btnReset = document.getElementById('btnReset');
+  document.getElementById('btnCopy').addEventListener('click',()=>{
+    const link='https://discord.com/oauth2/authorize?client_id=1416254396303675392&permissions=2048&integration_type=0&scope=bot';
+    navigator.clipboard.writeText(link);
+    alert('Đã sao chép link invite của OrionX!');
+  });
 
-    function addMessage(text, from='bot'){
-      const div = document.createElement('div');
-      div.className = 'msg ' + (from==='user' ? 'from-user' : 'from-bot');
-      div.innerHTML = text.replace(/\n/g,'<br>');
-      messagesEl.appendChild(div);
-      messagesEl.scrollTop = messagesEl.scrollHeight;
-    }
-
-    // commands logic
-    function ensureRegistered(name){
-      if(!name) return {ok:false, msg:'Vui lòng nhập tên người dùng ở ô bên trái.'};
-      const users = loadUsers();
-      if(!users[name]) return {ok:false, msg:'Chưa đăng ký — gõ xregister để đăng ký.'};
-      return {ok:true, users, user:users[name]};
-    }
-
-    function handleCommand(raw, name){
-      const text = raw.trim();
-      const lc = text.toLowerCase();
-
-      // auto-responses for owo/uwu even if not a command
-      if(lc.includes('owo') || lc.includes('uwu')){
-        addMessage('<strong>OrionX:</strong> 👉 UwU What\'s this?');
-      }
-
-      if(!text.startsWith('x') && !text.startsWith('X')) return;
-      const parts = text.slice(1).split(/\s+/);
-      const cmd = parts[0];
-      const args = parts.slice(1);
-
-      if(cmd === 'owo'){
-        addMessage(`<strong>OrionX:</strong> ${name ? name : 'Người dùng'} says owo 🥺👉👈`);
-        return;
-      }
-
-      if(cmd === 'ping'){
-        const latency = Math.floor(Math.random()*200)+20;
-        addMessage(`<strong>OrionX:</strong> Pong! 🏓 ${latency}ms`);
-        return;
-      }
-
-      if(cmd === 'register' || cmd === 'xregister'){
-        if(!name){ addMessage('<strong>OrionX:</strong> Vui lòng điền tên trước rồi nhấn đăng ký.'); return; }
-        const users = loadUsers();
-        if(users[name]){ addMessage('<strong>OrionX:</strong> Tài khoản đã tồn tại.'); return; }
-        users[name] = {balance: 100, lastDaily: 0};
-        saveUsers(users);
-        addMessage(`<strong>OrionX:</strong> Đã đăng ký ${name}. Bắt đầu với 100 credits.`);
-        return;
-      }
-
-      if(cmd === 'balance' || cmd === 'bal' || cmd === 'xbalance'){
-        const ok = ensureRegistered(name);
-        if(!ok.ok){ addMessage(`<strong>OrionX:</strong> ${ok.msg}`); return; }
-        addMessage(`<strong>OrionX:</strong> ${name} có ${ok.user.balance} credits.`);
-        return;
-      }
-
-      if(cmd === 'daily' || cmd === 'xdaily'){
-        const ok = ensureRegistered(name);
-        if(!ok.ok){ addMessage(`<strong>OrionX:</strong> ${ok.msg}`); return; }
-        const now = Date.now();
-        const user = ok.user;
-        const ONE_DAY = 24*60*60*1000;
-        if(now - (user.lastDaily||0) < ONE_DAY){
-          const left = ONE_DAY - (now - user.lastDaily);
-          const hours = Math.floor(left/3600000);
-          const minutes = Math.floor((left%3600000)/60000);
-          addMessage(`<strong>OrionX:</strong> Bạn đã nhận daily rồi. Thời gian còn lại: ${hours}h ${minutes}m`);
-          return;
-        }
-        const gain = Math.floor(Math.random()*150) + 50;
-        user.balance += gain;
-        user.lastDaily = now;
-        const users = ok.users; users[name] = user; saveUsers(users);
-        addMessage(`<strong>OrionX:</strong> Bạn nhận được ${gain} credits! Bây giờ có ${user.balance} credits.`);
-        return;
-      }
-
-      if(cmd === 'hunt' || cmd === 'xhunt'){
-        const ok = ensureRegistered(name);
-        if(!ok.ok){ addMessage(`<strong>OrionX:</strong> ${ok.msg}`); return; }
-        const roll = Math.random();
-        const users = ok.users; const user = ok.user;
-        if(roll < 0.6){ const gain = Math.floor(Math.random()*40)+10; user.balance += gain; users[name]=user; saveUsers(users); addMessage(`<strong>OrionX:</strong> Bạn săn được và kiếm ${gain} credits!`); }
-        else if(roll < 0.9){ const gain = Math.floor(Math.random()*120)+50; user.balance += gain; users[name]=user; saveUsers(users); addMessage(`<strong>OrionX:</strong> Hiếm! Bạn săn được vật phẩm hiếm và nhận ${gain} credits!`); }
-        else{ const loss = Math.floor(Math.random()*30)+5; user.balance = Math.max(0, user.balance - loss); users[name]=user; saveUsers(users); addMessage(`<strong>OrionX:</strong> Bị thất bại! Mất ${loss} credits...`); }
-        return;
-      }
-
-      addMessage(`<strong>OrionX:</strong> Lệnh không rõ: <code>${cmd}</code>. Hỗ trợ: xowo, xping, xregister, xbalance, xdaily, xhunt.`);
-    }
-
-    // UI events
-    btnSend.addEventListener('click', ()=>{
-      const msg = input.value.trim();
-      const name = usernameInput.value.trim();
-      if(!msg) return;
-      addMessage(`<strong>${name || 'Bạn'}:</strong> ${escapeHtml(msg)}`,'user');
-      handleCommand(msg, name);
-      input.value='';
-      input.focus();
-    });
-
-    input.addEventListener('keydown', (e)=>{ if(e.key === 'Enter'){ btnSend.click(); } });
-
-    btnRegister.addEventListener('click', ()=>{
-      const name = usernameInput.value.trim();
-      if(!name){ alert('Vui lòng nhập tên người dùng trước khi đăng ký.'); return; }
-      const users = loadUsers();
-      if(users[name]){ alert('Tài khoản đã tồn tại.'); return; }
-      users[name] = {balance:100, lastDaily:0};
-      saveUsers(users);
-      updateStorageInfo();
-      addMessage(`<strong>OrionX:</strong> Đã đăng ký ${name} — 100 credits.`);
-    });
-
-    btnReset.addEventListener('click', ()=>{
-      if(confirm('Xóa tất cả dữ liệu OrionX trong localStorage?')){ localStorage.removeItem(STORAGE_KEY); updateStorageInfo(); addMessage('<strong>OrionX:</strong> Đã xóa dữ liệu.'); }
-    });
-
-    function escapeHtml(s){ return s.replace(/[&<>]/g, c=> ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])); }
-
-    // init
-    updateStorageInfo();
-    addMessage('<strong>OrionX:</strong> Chào! Điền tên ở bên trái rồi thử lệnh <code>xregister</code> → <code>xbalance</code> → <code>xdaily</code> hoặc gõ tin nhắn chứa <code>owo</code>.');
-  </script>
+  // Initial greeting
+  appendMessage('ai','Xin chào! Mình là OrionX trợ lý. Hỏi mình về lệnh, minigame hoặc cách chơi nhé.');
+</script>
 </body>
 </html>
