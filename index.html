@@ -3,103 +3,604 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>OrionX — Bot Game Discord bởi Team XYRON</title>
-<meta name="description" content="OrionX — Bot Discord chủ đề game, được phát triển bởi team XYRON. Bot kinh tế, minigame, pet và hệ thống nhiệm vụ giống owo">
+<title>OrionX — Bot AI Discord bởi Team XYRON</title>
+<meta name="description" content="OrionX — Bot Discord chủ đề game, được phát triển bởi team XYRON. Bot kinh tế, minigame, pet và hệ thống nhiệm vụ">
 <style>
-:root{
-  --bg:#0f1720;--card:#0b1220;--muted:#9aa4b2;--accent:#6ee7b7;--accent2:#7cc0ff;
-}
-*{box-sizing:border-box;transition:all .3s ease}
-body{margin:0;font-family:'Poppins',system-ui,Segoe UI,Roboto,Arial;background:radial-gradient(circle at 30% 20%,#081425,#030712 80%);color:#e6eef6;overflow-x:hidden}
-.wrap{max-width:1000px;margin:32px auto;padding:20px;animation:fadeIn 1.5s ease}
-@keyframes fadeIn{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:none}}
-header{display:flex;align-items:center;gap:16px;animation:fadeIn 1s ease}
-.logo{width:72px;height:72px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-weight:700;color:#042;animation:pulseGlow 2.8s infinite ease-in-out}
-@keyframes pulseGlow{0%,100%{box-shadow:0 0 12px rgba(110,231,183,0.4)}50%{box-shadow:0 0 18px rgba(124,192,255,0.5)}}
-h1{margin:0;font-size:28px;letter-spacing:1px;text-shadow:0 0 8px rgba(124,192,255,0.3)}
-p.lead{color:var(--muted);margin:6px 0 0;font-size:15px}
-.hero-meta{display:flex;gap:10px;align-items:center;margin-top:10px}
-.pill{padding:6px 8px;border-radius:999px;background:rgba(255,255,255,0.04);font-size:13px;box-shadow:0 0 12px rgba(110,231,183,0.4)}
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap');
 
-.card{background:rgba(255,255,255,0.03);border-radius:12px;padding:16px;margin-top:16px;border:1px solid rgba(255,255,255,0.03)}
-.features{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:12px}
-.feature{padding:12px;border-radius:8px;background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);border:1px solid rgba(255,255,255,0.04);transition:transform .3s ease,box-shadow .3s ease}
-.feature:hover{transform:translateY(-5px) scale(1.02);box-shadow:0 0 20px rgba(124,192,255,0.15)}
+:root{
+  --bg:#0a0e27;
+  --card:#0f1629;
+  --muted:#8b92a8;
+  --accent:#6ee7b7;
+  --accent2:#7cc0ff;
+  --accent3:#f472b6;
+  --glow:#00ffff;
+}
+
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+body{
+  font-family:'Poppins',sans-serif;
+  background:#0a0e27;
+  color:#e6eef6;
+  overflow-x:hidden;
+  position:relative;
+}
+
+/* Animated Background */
+.bg-animation{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  z-index:-1;
+  background:radial-gradient(circle at 20% 50%, rgba(110,231,183,0.15) 0%, transparent 50%),
+             radial-gradient(circle at 80% 80%, rgba(124,192,255,0.15) 0%, transparent 50%),
+             radial-gradient(circle at 40% 20%, rgba(244,114,182,0.1) 0%, transparent 50%);
+  animation:bgShift 20s ease infinite;
+}
+
+@keyframes bgShift{
+  0%,100%{transform:scale(1) rotate(0deg)}
+  50%{transform:scale(1.1) rotate(5deg)}
+}
+
+/* Floating Particles */
+.particle{
+  position:fixed;
+  border-radius:50%;
+  pointer-events:none;
+  z-index:0;
+  animation:float 15s infinite ease-in-out;
+  opacity:0.6;
+}
+
+@keyframes float{
+  0%,100%{transform:translateY(0) translateX(0)}
+  25%{transform:translateY(-30px) translateX(10px)}
+  50%{transform:translateY(-60px) translateX(-10px)}
+  75%{transform:translateY(-30px) translateX(5px)}
+}
+
+.wrap{
+  max-width:1100px;
+  margin:0 auto;
+  padding:40px 20px;
+  position:relative;
+  z-index:1;
+}
+
+/* Header Animations */
+header{
+  display:flex;
+  align-items:center;
+  gap:24px;
+  margin-bottom:50px;
+  animation:slideDown 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideDown{
+  from{opacity:0;transform:translateY(-50px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+.logo{
+  width:90px;
+  height:90px;
+  border-radius:20px;
+  background:linear-gradient(135deg,var(--accent),var(--accent2),var(--accent3));
+  background-size:200% 200%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:800;
+  font-size:32px;
+  color:#042;
+  position:relative;
+  cursor:pointer;
+  animation:gradientRotate 4s ease infinite, logoPulse 3s ease-in-out infinite;
+  box-shadow:0 0 30px rgba(110,231,183,0.5), 0 0 60px rgba(124,192,255,0.3);
+  transition:all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.logo:hover{
+  transform:scale(1.15) rotate(360deg);
+  box-shadow:0 0 50px rgba(110,231,183,0.8), 0 0 100px rgba(124,192,255,0.6);
+}
+
+@keyframes gradientRotate{
+  0%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+  100%{background-position:0% 50%}
+}
+
+@keyframes logoPulse{
+  0%,100%{box-shadow:0 0 30px rgba(110,231,183,0.5)}
+  50%{box-shadow:0 0 60px rgba(124,192,255,0.8), 0 0 90px rgba(244,114,182,0.4)}
+}
+
+h1{
+  font-size:42px;
+  font-weight:800;
+  letter-spacing:2px;
+  background:linear-gradient(135deg,#6ee7b7,#7cc0ff,#f472b6);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  animation:textShine 3s ease infinite;
+  text-shadow:0 0 30px rgba(110,231,183,0.3);
+}
+
+@keyframes textShine{
+  0%,100%{filter:brightness(1)}
+  50%{filter:brightness(1.3)}
+}
+
+p.lead{
+  color:var(--muted);
+  font-size:16px;
+  margin-top:8px;
+  animation:fadeIn 1.5s ease 0.3s both;
+}
+
+.hero-meta{
+  display:flex;
+  gap:12px;
+  margin-top:12px;
+  flex-wrap:wrap;
+  animation:fadeIn 1.5s ease 0.6s both;
+}
+
+@keyframes fadeIn{
+  from{opacity:0;transform:translateY(20px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+.pill{
+  padding:10px 16px;
+  border-radius:999px;
+  background:rgba(255,255,255,0.05);
+  backdrop-filter:blur(10px);
+  font-size:14px;
+  border:1px solid rgba(255,255,255,0.1);
+  box-shadow:0 4px 20px rgba(0,0,0,0.3);
+  transition:all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  cursor:pointer;
+}
+
+.pill:hover{
+  transform:translateY(-3px) scale(1.05);
+  background:rgba(255,255,255,0.08);
+  box-shadow:0 8px 30px rgba(110,231,183,0.3);
+}
+
+.pill a{
+  color:var(--accent);
+  text-decoration:none;
+  font-weight:600;
+  transition:color 0.3s ease;
+}
+
+.pill a:hover{
+  color:var(--accent2);
+}
+
+/* Cards */
+.card{
+  background:rgba(15,22,41,0.7);
+  backdrop-filter:blur(20px);
+  border-radius:24px;
+  padding:32px;
+  margin-bottom:32px;
+  border:1px solid rgba(255,255,255,0.05);
+  position:relative;
+  overflow:hidden;
+  animation:cardSlideIn 1s ease both;
+  box-shadow:0 10px 40px rgba(0,0,0,0.4);
+  transition:all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.card:nth-child(2){animation-delay:0.2s}
+.card:nth-child(3){animation-delay:0.4s}
+.card:nth-child(4){animation-delay:0.6s}
+
+@keyframes cardSlideIn{
+  from{opacity:0;transform:translateX(-50px)}
+  to{opacity:1;transform:translateX(0)}
+}
+
+.card::before{
+  content:'';
+  position:absolute;
+  top:-50%;
+  left:-50%;
+  width:200%;
+  height:200%;
+  background:conic-gradient(from 0deg, transparent, rgba(110,231,183,0.1), transparent 30%);
+  animation:cardRotate 6s linear infinite;
+  opacity:0;
+  transition:opacity 0.5s ease;
+}
+
+.card:hover::before{
+  opacity:1;
+}
+
+@keyframes cardRotate{
+  from{transform:rotate(0deg)}
+  to{transform:rotate(360deg)}
+}
+
+.card:hover{
+  transform:translateY(-8px);
+  box-shadow:0 20px 60px rgba(110,231,183,0.3);
+  border-color:rgba(110,231,183,0.3);
+}
+
+.card h3{
+  font-size:28px;
+  font-weight:700;
+  margin-bottom:16px;
+  color:#fff;
+  position:relative;
+  z-index:1;
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.card p{
+  color:var(--muted);
+  line-height:1.8;
+  position:relative;
+  z-index:1;
+}
+
+/* Features Grid */
+.features{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:20px;
+  margin-top:24px;
+  position:relative;
+  z-index:1;
+}
+
+.feature{
+  padding:24px;
+  border-radius:16px;
+  background:linear-gradient(135deg,rgba(255,255,255,0.03),rgba(255,255,255,0.01));
+  border:1px solid rgba(255,255,255,0.05);
+  transition:all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  cursor:pointer;
+  position:relative;
+  overflow:hidden;
+}
+
+.feature::after{
+  content:'';
+  position:absolute;
+  top:50%;
+  left:50%;
+  width:0;
+  height:0;
+  border-radius:50%;
+  background:radial-gradient(circle, rgba(110,231,183,0.2), transparent);
+  transform:translate(-50%,-50%);
+  transition:width 0.6s ease, height 0.6s ease;
+}
+
+.feature:hover::after{
+  width:300px;
+  height:300px;
+}
+
+.feature:hover{
+  transform:translateY(-10px) scale(1.05);
+  box-shadow:0 15px 40px rgba(124,192,255,0.3);
+  border-color:rgba(110,231,183,0.3);
+  background:linear-gradient(135deg,rgba(110,231,183,0.08),rgba(124,192,255,0.05));
+}
+
+.feature strong{
+  display:block;
+  font-size:18px;
+  font-weight:700;
+  margin-bottom:8px;
+  color:#fff;
+  position:relative;
+  z-index:1;
+}
+
+.feature .muted{
+  font-size:14px;
+  line-height:1.6;
+  position:relative;
+  z-index:1;
+}
+
+/* Buttons */
+.btn-container{
+  margin-top:24px;
+  display:flex;
+  gap:16px;
+  flex-wrap:wrap;
+  position:relative;
+  z-index:1;
+}
 
 .btn{
-  display:inline-block;padding:12px 18px;border-radius:12px;font-weight:600;position:relative;overflow:hidden;cursor:pointer;color:#022;
-  background:linear-gradient(270deg, #6ee7b7, #7cc0ff, #6ee7b7);
-  background-size:600% 600%;
-  animation: gradientMove 5s ease infinite;
+  position:relative;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:16px 32px;
+  border-radius:16px;
+  font-weight:700;
+  font-size:16px;
+  cursor:pointer;
   border:none;
-  transition:transform .3s ease, box-shadow .3s ease;
-  box-shadow:0 4px 15px rgba(124,192,255,0.4);
-  margin-right:10px;
+  color:#042;
+  background:linear-gradient(135deg, #6ee7b7, #7cc0ff, #f472b6);
+  background-size:200% 200%;
+  animation:gradientMove 4s ease infinite;
+  box-shadow:0 8px 30px rgba(110,231,183,0.5);
+  transition:all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  overflow:hidden;
 }
+
 .btn::before{
-  content:'';position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(255,255,255,0.15);
-  pointer-events:none;border-radius:12px;filter:blur(4px);animation: shimmer 2s infinite; z-index:0;
+  content:'';
+  position:absolute;
+  top:50%;
+  left:50%;
+  width:0;
+  height:0;
+  border-radius:50%;
+  background:rgba(255,255,255,0.3);
+  transform:translate(-50%,-50%);
+  transition:width 0.6s ease, height 0.6s ease;
 }
-.btn:hover{transform:translateY(-4px) scale(1.08);box-shadow:0 10px 30px rgba(124,192,255,0.7),0 0 15px rgba(110,231,183,0.6);}
-@keyframes gradientMove{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
-@keyframes shimmer{0%{transform:translateX(-100%) skewX(-20deg)}50%{transform:translateX(100%) skewX(-20deg)}100%{transform:translateX(-100%) skewX(-20deg)}}
-footer{margin-top:18px;color:var(--muted);font-size:13px;text-align:center}
+
+.btn:hover::before{
+  width:400px;
+  height:400px;
+}
+
+.btn:hover{
+  transform:translateY(-5px) scale(1.08);
+  box-shadow:0 15px 50px rgba(124,192,255,0.8), 0 0 40px rgba(110,231,183,0.6);
+}
+
+.btn:active{
+  transform:translateY(-2px) scale(1.05);
+}
+
+@keyframes gradientMove{
+  0%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+  100%{background-position:0% 50%}
+}
+
+.btn span{
+  position:relative;
+  z-index:1;
+}
+
+/* List Styling */
+ul{
+  list-style:none;
+  padding-left:0;
+  position:relative;
+  z-index:1;
+}
+
+ul li{
+  padding:12px 0 12px 36px;
+  position:relative;
+  line-height:1.8;
+  transition:all 0.3s ease;
+}
+
+ul li::before{
+  content:'✨';
+  position:absolute;
+  left:0;
+  font-size:20px;
+  animation:sparkle 2s ease infinite;
+}
+
+ul li:hover{
+  color:#fff;
+  transform:translateX(10px);
+}
+
+@keyframes sparkle{
+  0%,100%{opacity:1;transform:scale(1)}
+  50%{opacity:0.5;transform:scale(1.2)}
+}
+
+ul li code{
+  background:rgba(110,231,183,0.15);
+  padding:4px 8px;
+  border-radius:6px;
+  font-family:monospace;
+  color:var(--accent);
+  font-weight:600;
+}
+
+/* Footer */
+footer{
+  margin-top:60px;
+  padding:30px;
+  text-align:center;
+  color:var(--muted);
+  font-size:14px;
+  background:rgba(255,255,255,0.02);
+  border-radius:16px;
+  border:1px solid rgba(255,255,255,0.05);
+  animation:fadeIn 2s ease 1s both;
+}
+
+footer strong{
+  color:var(--accent);
+  font-weight:700;
+}
+
+/* Toast Notification */
+.toast{
+  position:fixed;
+  bottom:30px;
+  right:30px;
+  background:linear-gradient(135deg,#6ee7b7,#7cc0ff);
+  color:#042;
+  padding:20px 30px;
+  border-radius:16px;
+  font-weight:600;
+  box-shadow:0 10px 40px rgba(110,231,183,0.6);
+  transform:translateY(150px);
+  opacity:0;
+  transition:all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  z-index:1000;
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.toast.show{
+  transform:translateY(0);
+  opacity:1;
+}
+
+.toast::before{
+  content:'✅';
+  font-size:24px;
+}
+
+/* Responsive */
+@media(max-width:768px){
+  h1{font-size:28px}
+  .logo{width:70px;height:70px;font-size:24px}
+  header{flex-direction:column;text-align:center}
+  .features{grid-template-columns:1fr}
+  .btn-container{flex-direction:column}
+  .btn{width:100%}
+}
 </style>
 </head>
 <body>
+<div class="bg-animation"></div>
+
 <div class="wrap">
 <header>
   <div class="logo">OX</div>
   <div>
-    <h1>OrionX <span class="small muted">— Bot AI Discord bởi Team XYRON</span></h1>
-    <p class="lead">Bot AI, kinh tế và pet — Chất lượng cao</p>
+    <h1>OrionX</h1>
+    <p class="lead">Bot AI Discord bởi Team XYRON — Kinh tế, minigame, pet chất lượng cao</p>
     <div class="hero-meta">
       <div class="pill">Prefix: <code>X</code></div>
-      <div class="pill">Server support: <a href="https://discord.gg/3AgHp9CXJP" target="_blank" style="color:#6ee7b7;text-decoration:underline">Tham gia ngay</a></div>
+      <div class="pill">
+        <a href="https://discord.gg/3AgHp9CXJP" target="_blank">Tham gia Server Support</a>
+      </div>
     </div>
   </div>
 </header>
 
 <section class="card">
-<h3>🎮 Giới thiệu</h3>
-<p class="muted">OrionX mang đến trải nghiệm vui nhộn với hệ thống trò chuyện AI của OpenAI và hệ thống minigame, hệ thống tiền ảo, pet, duel, leaderboard và shop chi tiết. Tất cả được thiết kế với hiệu ứng và animation sống động.</p>
-<div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;align-items:center">
-  <a href="https://discord.com/oauth2/authorize?client_id=1416254396303675392&permissions=2048&integration_type=0&scope=bot" target="_blank" class="btn">Invite Bot</a>
-  <button class="btn" id="btnCopy">Sao chép link invite</button>
-</div>
+  <h3>🎮 Giới thiệu</h3>
+  <p class="muted">OrionX mang đến trải nghiệm vui nhộn với hệ thống trò chuyện AI của OpenAI và hệ thống minigame, hệ thống tiền ảo, pet, duel, leaderboard và shop chi tiết. Tất cả được thiết kế với hiệu ứng và animation sống động.</p>
+  <div class="btn-container">
+    <a href="https://discord.com/oauth2/authorize?client_id=1432330183834075166" target="_blank" class="btn" style="text-decoration:none">
+      <span>🚀 Invite Bot Ngay</span>
+    </a>
+    <button class="btn" id="btnCopy">
+      <span>📋 Sao chép Link Invite</span>
+    </button>
+  </div>
 </section>
 
 <section class="card">
-<h3>✨ Tính năng nổi bật</h3>
-<div class="features">
-  <div class="feature"><strong>🤖 Chat AI</strong><div class="muted">Hệ thống trò chuyện AI cực kỳ thông minh có thể trả lời tất cả câu hỏi mà người dùng đưa ra bằng hệ thống OpenAI</div></div>
-  <div class="feature"><strong>💰 Hệ thống tiền tệ</strong><div class="muted">Shop, daily reward, inventory có hiệu ứng mở popup mượt mà.</div></div>
-  <div class="feature"><strong>🐾 Pets & Items</strong><div class="muted">Giao diện nuôi pet với animation hover và fusion.</div></div>
-  <div class="feature"><strong>📊 Leaderboard</strong><div class="muted">Hiển thị động và update bằng hiệu ứng fade slide.</div></div>
-</div>
+  <h3>✨ Tính năng nổi bật</h3>
+  <div class="features">
+    <div class="feature">
+      <strong>🤖 Chat AI</strong>
+      <div class="muted">Hệ thống trò chuyện AI cực kỳ thông minh có thể trả lời tất cả câu hỏi mà người dùng đưa ra bằng hệ thống OpenAI</div>
+    </div>
+    <div class="feature">
+      <strong>💰 Hệ thống tiền tệ</strong>
+      <div class="muted">Shop, daily reward, inventory có hiệu ứng mở popup mượt mà</div>
+    </div>
+    <div class="feature">
+      <strong>🐾 Pets & Items</strong>
+      <div class="muted">Giao diện nuôi pet với animation hover và fusion</div>
+    </div>
+    <div class="feature">
+      <strong>📊 Leaderboard</strong>
+      <div class="muted">Hiển thị động và update bằng hiệu ứng fade slide</div>
+    </div>
+  </div>
 </section>
 
 <section class="card">
-<h3>💡 Mẹo & Hướng dẫn</h3>
-<ul class="muted">
-  <li>Tag bot để nhận trợ giúp nhanh.</li>
-  <li>Dùng prefix <code>X</code> trước lệnh để bot nhận dạng.</li>
-  <li>Tham gia server support để cập nhật tin tức và hỏi đáp.</li>
-  <li>Khám phá minigame và shop để nhận thưởng hằng ngày.</li>
-  <li>Thử các combo pet và duel để tối đa hóa điểm số.</li>
-</ul>
+  <h3>💡 Mẹo & Hướng dẫn</h3>
+  <ul class="muted">
+    <li>Tag bot để nhận trợ giúp nhanh</li>
+    <li>Dùng prefix <code>X</code> trước lệnh để bot nhận dạng</li>
+    <li>Tham gia server support để cập nhật tin tức và hỏi đáp</li>
+    <li>Khám phá minigame và shop để nhận thưởng hằng ngày</li>
+    <li>Thử các combo pet và duel để tối đa hóa điểm số</li>
+  </ul>
 </section>
 
 <footer>
-OrionX © 2025 — Được phát triển bởi <strong>Team XYRON</strong>. Prefix: <strong>X</strong>.
+  OrionX © 2025 — Được phát triển bởi <strong>Team XYRON</strong>. Prefix: <strong>X</strong>.
 </footer>
 </div>
 
+<div class="toast" id="toast"></div>
+
 <script>
-document.getElementById('btnCopy').addEventListener('click',()=>{
-  const link='https://discord.com/oauth2/authorize?client_id=1416254396303675392&permissions=2048&integration_type=0&scope=bot';
-  navigator.clipboard.writeText(link);
-  alert('✅ Đã sao chép link invite của OrionX!');
+// Create floating particles
+for(let i=0;i<15;i++){
+  const particle = document.createElement('div');
+  particle.className = 'particle';
+  particle.style.width = Math.random()*60+20+'px';
+  particle.style.height = particle.style.width;
+  particle.style.left = Math.random()*100+'%';
+  particle.style.top = Math.random()*100+'%';
+  particle.style.background = `radial-gradient(circle, ${['rgba(110,231,183,0.3)','rgba(124,192,255,0.3)','rgba(244,114,182,0.3)'][Math.floor(Math.random()*3)]}, transparent)`;
+  particle.style.animationDelay = Math.random()*5+'s';
+  particle.style.animationDuration = (Math.random()*10+10)+'s';
+  document.body.appendChild(particle);
+}
+
+// Copy button functionality
+document.getElementById('btnCopy').addEventListener('click', function() {
+  const link = 'https://discord.com/oauth2/authorize?client_id=1432330183834075166';
+  navigator.clipboard.writeText(link).then(() => {
+    showToast('✅ Đã sao chép link invite của OrionX!');
+  });
+});
+
+function showToast(message) {
+  const toast = document.getElementById('toast');
+  toast.textContent = message;
+  toast.classList.add('show');
+  setTimeout(() => {
+    toast.classList.remove('show');
+  }, 3000);
+}
+
+// Add hover sound effect simulation
+document.querySelectorAll('.btn, .feature, .card').forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    el.style.transition = 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)';
+  });
 });
 </script>
 </body>
