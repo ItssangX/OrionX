@@ -3,27 +3,36 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>OrionX — Bot AI Discord</title>
+<title>OrionX — Bot AI Discord bởi Team XYRON</title>
+<meta name="description" content="OrionX — Bot Discord chủ đề game, được phát triển bởi team XYRON. Bot kinh tế, minigame, pet và hệ thống nhiệm vụ">
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap');
 
 :root{
   --bg:#0a0e27;
   --card:#0f1629;
+  --muted:#8b92a8;
   --accent:#6ee7b7;
   --accent2:#7cc0ff;
   --accent3:#f472b6;
+  --glow:#00ffff;
 }
 
-*{box-sizing:border-box;margin:0;padding:0}
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
 
 body{
   font-family:'Poppins',sans-serif;
   background:#0a0e27;
   color:#e6eef6;
   overflow-x:hidden;
+  position:relative;
 }
 
+/* Animated Background */
 .bg-animation{
   position:fixed;
   top:0;
@@ -32,686 +41,567 @@ body{
   height:100%;
   z-index:-1;
   background:radial-gradient(circle at 20% 50%, rgba(110,231,183,0.15) 0%, transparent 50%),
-             radial-gradient(circle at 80% 80%, rgba(124,192,255,0.15) 0%, transparent 50%);
+             radial-gradient(circle at 80% 80%, rgba(124,192,255,0.15) 0%, transparent 50%),
+             radial-gradient(circle at 40% 20%, rgba(244,114,182,0.1) 0%, transparent 50%);
   animation:bgShift 20s ease infinite;
 }
 
 @keyframes bgShift{
-  0%,100%{transform:scale(1)}
-  50%{transform:scale(1.1)}
+  0%,100%{transform:scale(1) rotate(0deg)}
+  50%{transform:scale(1.1) rotate(5deg)}
 }
 
-/* Navigation */
-nav{
-  position:sticky;
-  top:0;
-  z-index:100;
-  background:rgba(15,22,41,0.95);
-  backdrop-filter:blur(20px);
-  border-bottom:1px solid rgba(255,255,255,0.1);
-  padding:20px 0;
-  animation:slideDown 0.8s ease;
+/* Floating Particles */
+.particle{
+  position:fixed;
+  border-radius:50%;
+  pointer-events:none;
+  z-index:0;
+  animation:float 15s infinite ease-in-out;
+  opacity:0.6;
+}
+
+@keyframes float{
+  0%,100%{transform:translateY(0) translateX(0)}
+  25%{transform:translateY(-30px) translateX(10px)}
+  50%{transform:translateY(-60px) translateX(-10px)}
+  75%{transform:translateY(-30px) translateX(5px)}
+}
+
+.wrap{
+  max-width:1100px;
+  margin:0 auto;
+  padding:40px 20px;
+  position:relative;
+  z-index:1;
+}
+
+/* Header Animations */
+header{
+  display:flex;
+  align-items:center;
+  gap:24px;
+  margin-bottom:50px;
+  animation:slideDown 1.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @keyframes slideDown{
-  from{transform:translateY(-100%)}
-  to{transform:translateY(0)}
-}
-
-.nav-container{
-  max-width:1200px;
-  margin:0 auto;
-  padding:0 20px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-}
-
-.logo-nav{
-  display:flex;
-  align-items:center;
-  gap:12px;
-  font-size:24px;
-  font-weight:800;
-  background:linear-gradient(135deg,#6ee7b7,#7cc0ff);
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-  cursor:pointer;
-  transition:transform 0.3s ease;
-}
-
-.logo-nav:hover{
-  transform:scale(1.05);
-}
-
-.nav-links{
-  display:flex;
-  gap:30px;
-  list-style:none;
-}
-
-.nav-links a{
-  color:#8b92a8;
-  text-decoration:none;
-  font-weight:600;
-  transition:all 0.3s ease;
-  padding:8px 16px;
-  border-radius:8px;
-  position:relative;
-}
-
-.nav-links a::after{
-  content:'';
-  position:absolute;
-  bottom:0;
-  left:50%;
-  width:0;
-  height:2px;
-  background:linear-gradient(90deg,var(--accent),var(--accent2));
-  transition:all 0.3s ease;
-  transform:translateX(-50%);
-}
-
-.nav-links a:hover{
-  color:#fff;
-}
-
-.nav-links a:hover::after{
-  width:80%;
-}
-
-.nav-links a.active{
-  color:#fff;
-  background:rgba(110,231,183,0.1);
-}
-
-/* Container */
-.container{
-  max-width:1200px;
-  margin:0 auto;
-  padding:40px 20px;
-}
-
-/* Hero Section */
-.hero{
-  text-align:center;
-  padding:60px 20px;
-  animation:fadeIn 1s ease;
-}
-
-@keyframes fadeIn{
-  from{opacity:0;transform:translateY(30px)}
+  from{opacity:0;transform:translateY(-50px)}
   to{opacity:1;transform:translateY(0)}
 }
 
-.hero h1{
-  font-size:56px;
+.logo{
+  width:90px;
+  height:90px;
+  border-radius:20px;
+  background:linear-gradient(135deg,var(--accent),var(--accent2),var(--accent3));
+  background-size:200% 200%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
   font-weight:800;
+  font-size:32px;
+  color:#042;
+  position:relative;
+  cursor:pointer;
+  animation:gradientRotate 4s ease infinite, logoPulse 3s ease-in-out infinite;
+  box-shadow:0 0 30px rgba(110,231,183,0.5), 0 0 60px rgba(124,192,255,0.3);
+  transition:all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.logo:hover{
+  transform:scale(1.15) rotate(360deg);
+  box-shadow:0 0 50px rgba(110,231,183,0.8), 0 0 100px rgba(124,192,255,0.6);
+}
+
+@keyframes gradientRotate{
+  0%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+  100%{background-position:0% 50%}
+}
+
+@keyframes logoPulse{
+  0%,100%{box-shadow:0 0 30px rgba(110,231,183,0.5)}
+  50%{box-shadow:0 0 60px rgba(124,192,255,0.8), 0 0 90px rgba(244,114,182,0.4)}
+}
+
+h1{
+  font-size:42px;
+  font-weight:800;
+  letter-spacing:2px;
   background:linear-gradient(135deg,#6ee7b7,#7cc0ff,#f472b6);
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
-  margin-bottom:20px;
-  animation:textFloat 3s ease infinite;
+  animation:textShine 3s ease infinite;
+  text-shadow:0 0 30px rgba(110,231,183,0.3);
 }
 
-@keyframes textFloat{
-  0%,100%{transform:translateY(0)}
-  50%{transform:translateY(-10px)}
+@keyframes textShine{
+  0%,100%{filter:brightness(1)}
+  50%{filter:brightness(1.3)}
 }
 
-.hero p{
-  font-size:20px;
-  color:#8b92a8;
-  margin-bottom:40px;
+p.lead{
+  color:var(--muted);
+  font-size:16px;
+  margin-top:8px;
+  animation:fadeIn 1.5s ease 0.3s both;
 }
 
-.status-badge{
-  display:inline-flex;
-  align-items:center;
-  gap:10px;
-  padding:12px 24px;
-  background:rgba(110,231,183,0.1);
-  border:1px solid rgba(110,231,183,0.3);
-  border-radius:999px;
-  font-weight:600;
-  animation:pulse 2s ease infinite;
+.hero-meta{
+  display:flex;
+  gap:12px;
+  margin-top:12px;
+  flex-wrap:wrap;
+  animation:fadeIn 1.5s ease 0.6s both;
 }
 
-@keyframes pulse{
-  0%,100%{box-shadow:0 0 20px rgba(110,231,183,0.3)}
-  50%{box-shadow:0 0 40px rgba(110,231,183,0.6)}
-}
-
-.status-dot{
-  width:10px;
-  height:10px;
-  border-radius:50%;
-  background:#6ee7b7;
-  animation:blink 1.5s ease infinite;
-}
-
-@keyframes blink{
-  0%,100%{opacity:1}
-  50%{opacity:0.3}
-}
-
-.status-badge.offline .status-dot{
-  background:#ef4444;
-}
-
-/* Section */
-.section{
-  margin-bottom:60px;
-  animation:slideUp 0.8s ease both;
-}
-
-.section:nth-child(2){animation-delay:0.1s}
-.section:nth-child(3){animation-delay:0.2s}
-.section:nth-child(4){animation-delay:0.3s}
-
-@keyframes slideUp{
-  from{opacity:0;transform:translateY(50px)}
+@keyframes fadeIn{
+  from{opacity:0;transform:translateY(20px)}
   to{opacity:1;transform:translateY(0)}
 }
 
-.section-header{
-  display:flex;
-  align-items:center;
-  gap:15px;
-  margin-bottom:30px;
-}
-
-.section-header h2{
-  font-size:36px;
-  font-weight:800;
-  color:#fff;
-}
-
-.section-icon{
-  font-size:40px;
-  animation:rotate 3s ease infinite;
-}
-
-@keyframes rotate{
-  0%,100%{transform:rotate(0deg)}
-  50%{transform:rotate(20deg)}
-}
-
-/* Commands Grid */
-.commands-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
-  gap:25px;
-}
-
-.command-category{
-  background:rgba(15,22,41,0.7);
-  backdrop-filter:blur(20px);
-  border-radius:20px;
-  padding:30px;
-  border:1px solid rgba(255,255,255,0.05);
-  transition:all 0.4s cubic-bezier(0.34,1.56,0.64,1);
-  position:relative;
-  overflow:hidden;
+.pill{
+  padding:10px 16px;
+  border-radius:999px;
+  background:rgba(255,255,255,0.05);
+  backdrop-filter:blur(10px);
+  font-size:14px;
+  border:1px solid rgba(255,255,255,0.1);
+  box-shadow:0 4px 20px rgba(0,0,0,0.3);
+  transition:all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
   cursor:pointer;
 }
 
-.command-category::before{
+.pill:hover{
+  transform:translateY(-3px) scale(1.05);
+  background:rgba(255,255,255,0.08);
+  box-shadow:0 8px 30px rgba(110,231,183,0.3);
+}
+
+.pill a{
+  color:var(--accent);
+  text-decoration:none;
+  font-weight:600;
+  transition:color 0.3s ease;
+}
+
+.pill a:hover{
+  color:var(--accent2);
+}
+
+/* Cards */
+.card{
+  background:rgba(15,22,41,0.7);
+  backdrop-filter:blur(20px);
+  border-radius:24px;
+  padding:32px;
+  margin-bottom:32px;
+  border:1px solid rgba(255,255,255,0.05);
+  position:relative;
+  overflow:hidden;
+  animation:cardSlideIn 1s ease both;
+  box-shadow:0 10px 40px rgba(0,0,0,0.4);
+  transition:all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.card:nth-child(2){animation-delay:0.2s}
+.card:nth-child(3){animation-delay:0.4s}
+.card:nth-child(4){animation-delay:0.6s}
+
+@keyframes cardSlideIn{
+  from{opacity:0;transform:translateX(-50px)}
+  to{opacity:1;transform:translateX(0)}
+}
+
+.card::before{
   content:'';
   position:absolute;
   top:-50%;
   left:-50%;
   width:200%;
   height:200%;
-  background:conic-gradient(from 0deg,transparent,rgba(110,231,183,0.1),transparent 30%);
-  animation:categoryRotate 6s linear infinite;
+  background:conic-gradient(from 0deg, transparent, rgba(110,231,183,0.1), transparent 30%);
+  animation:cardRotate 6s linear infinite;
   opacity:0;
   transition:opacity 0.5s ease;
 }
 
-.command-category:hover::before{
+.card:hover::before{
   opacity:1;
 }
 
-@keyframes categoryRotate{
+@keyframes cardRotate{
   from{transform:rotate(0deg)}
   to{transform:rotate(360deg)}
 }
 
-.command-category:hover{
-  transform:translateY(-10px) scale(1.03);
+.card:hover{
+  transform:translateY(-8px);
+  box-shadow:0 20px 60px rgba(110,231,183,0.3);
   border-color:rgba(110,231,183,0.3);
-  box-shadow:0 20px 60px rgba(110,231,183,0.2);
 }
 
-.category-header{
+.card h3{
+  font-size:28px;
+  font-weight:700;
+  margin-bottom:16px;
+  color:#fff;
+  position:relative;
+  z-index:1;
   display:flex;
   align-items:center;
   gap:12px;
-  margin-bottom:15px;
+}
+
+.card p{
+  color:var(--muted);
+  line-height:1.8;
   position:relative;
   z-index:1;
 }
 
-.category-icon{
-  font-size:32px;
-}
-
-.category-title{
-  font-size:22px;
-  font-weight:700;
-  color:#fff;
-}
-
-.category-desc{
-  color:#8b92a8;
-  line-height:1.6;
-  margin-bottom:20px;
-  position:relative;
-  z-index:1;
-}
-
-.command-list{
-  display:flex;
-  flex-wrap:wrap;
-  gap:10px;
-  position:relative;
-  z-index:1;
-}
-
-.command-tag{
-  padding:8px 16px;
-  background:rgba(110,231,183,0.1);
-  border:1px solid rgba(110,231,183,0.2);
-  border-radius:999px;
-  font-size:14px;
-  font-weight:600;
-  color:var(--accent);
-  transition:all 0.3s ease;
-}
-
-.command-tag:hover{
-  background:rgba(110,231,183,0.2);
-  transform:scale(1.1);
-  box-shadow:0 5px 15px rgba(110,231,183,0.3);
-}
-
-/* Leaderboard */
-.leaderboard-container{
-  background:rgba(15,22,41,0.7);
-  backdrop-filter:blur(20px);
-  border-radius:20px;
-  padding:40px;
-  border:1px solid rgba(255,255,255,0.05);
-}
-
-.leaderboard-tabs{
-  display:flex;
-  gap:15px;
-  margin-bottom:30px;
-  flex-wrap:wrap;
-}
-
-.tab-btn{
-  padding:12px 24px;
-  background:rgba(255,255,255,0.05);
-  border:1px solid rgba(255,255,255,0.1);
-  border-radius:12px;
-  color:#8b92a8;
-  font-weight:600;
-  cursor:pointer;
-  transition:all 0.3s ease;
-}
-
-.tab-btn:hover{
-  background:rgba(110,231,183,0.1);
-  color:#fff;
-  transform:translateY(-3px);
-}
-
-.tab-btn.active{
-  background:linear-gradient(135deg,rgba(110,231,183,0.2),rgba(124,192,255,0.2));
-  border-color:rgba(110,231,183,0.3);
-  color:#fff;
-}
-
-.leaderboard-list{
-  display:flex;
-  flex-direction:column;
-  gap:15px;
-}
-
-.leaderboard-item{
-  display:flex;
-  align-items:center;
+/* Features Grid */
+.features{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
   gap:20px;
-  padding:20px;
-  background:rgba(255,255,255,0.03);
+  margin-top:24px;
+  position:relative;
+  z-index:1;
+}
+
+.feature{
+  padding:24px;
+  border-radius:16px;
+  background:linear-gradient(135deg,rgba(255,255,255,0.03),rgba(255,255,255,0.01));
+  border:1px solid rgba(255,255,255,0.05);
+  transition:all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  cursor:pointer;
+  position:relative;
+  overflow:hidden;
+}
+
+.feature::after{
+  content:'';
+  position:absolute;
+  top:50%;
+  left:50%;
+  width:0;
+  height:0;
+  border-radius:50%;
+  background:radial-gradient(circle, rgba(110,231,183,0.2), transparent);
+  transform:translate(-50%,-50%);
+  transition:width 0.6s ease, height 0.6s ease;
+}
+
+.feature:hover::after{
+  width:300px;
+  height:300px;
+}
+
+.feature:hover{
+  transform:translateY(-10px) scale(1.05);
+  box-shadow:0 15px 40px rgba(124,192,255,0.3);
+  border-color:rgba(110,231,183,0.3);
+  background:linear-gradient(135deg,rgba(110,231,183,0.08),rgba(124,192,255,0.05));
+}
+
+.feature strong{
+  display:block;
+  font-size:18px;
+  font-weight:700;
+  margin-bottom:8px;
+  color:#fff;
+  position:relative;
+  z-index:1;
+}
+
+.feature .muted{
+  font-size:14px;
+  line-height:1.6;
+  position:relative;
+  z-index:1;
+}
+
+/* Buttons */
+.btn-container{
+  margin-top:24px;
+  display:flex;
+  gap:16px;
+  flex-wrap:wrap;
+  position:relative;
+  z-index:1;
+}
+
+.btn{
+  position:relative;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:16px 32px;
+  border-radius:16px;
+  font-weight:700;
+  font-size:16px;
+  cursor:pointer;
+  border:none;
+  color:#042;
+  background:linear-gradient(135deg, #6ee7b7, #7cc0ff, #f472b6);
+  background-size:200% 200%;
+  animation:gradientMove 4s ease infinite;
+  box-shadow:0 8px 30px rgba(110,231,183,0.5);
+  transition:all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  overflow:hidden;
+}
+
+.btn::before{
+  content:'';
+  position:absolute;
+  top:50%;
+  left:50%;
+  width:0;
+  height:0;
+  border-radius:50%;
+  background:rgba(255,255,255,0.3);
+  transform:translate(-50%,-50%);
+  transition:width 0.6s ease, height 0.6s ease;
+}
+
+.btn:hover::before{
+  width:400px;
+  height:400px;
+}
+
+.btn:hover{
+  transform:translateY(-5px) scale(1.08);
+  box-shadow:0 15px 50px rgba(124,192,255,0.8), 0 0 40px rgba(110,231,183,0.6);
+}
+
+.btn:active{
+  transform:translateY(-2px) scale(1.05);
+}
+
+@keyframes gradientMove{
+  0%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+  100%{background-position:0% 50%}
+}
+
+.btn span{
+  position:relative;
+  z-index:1;
+}
+
+/* List Styling */
+ul{
+  list-style:none;
+  padding-left:0;
+  position:relative;
+  z-index:1;
+}
+
+ul li{
+  padding:12px 0 12px 36px;
+  position:relative;
+  line-height:1.8;
+  transition:all 0.3s ease;
+}
+
+ul li::before{
+  content:'✨';
+  position:absolute;
+  left:0;
+  font-size:20px;
+  animation:sparkle 2s ease infinite;
+}
+
+ul li:hover{
+  color:#fff;
+  transform:translateX(10px);
+}
+
+@keyframes sparkle{
+  0%,100%{opacity:1;transform:scale(1)}
+  50%{opacity:0.5;transform:scale(1.2)}
+}
+
+ul li code{
+  background:rgba(110,231,183,0.15);
+  padding:4px 8px;
+  border-radius:6px;
+  font-family:monospace;
+  color:var(--accent);
+  font-weight:600;
+}
+
+/* Footer */
+footer{
+  margin-top:60px;
+  padding:30px;
+  text-align:center;
+  color:var(--muted);
+  font-size:14px;
+  background:rgba(255,255,255,0.02);
   border-radius:16px;
   border:1px solid rgba(255,255,255,0.05);
-  transition:all 0.3s cubic-bezier(0.34,1.56,0.64,1);
-  animation:itemSlide 0.5s ease both;
+  animation:fadeIn 2s ease 1s both;
 }
 
-.leaderboard-item:nth-child(1){animation-delay:0.05s}
-.leaderboard-item:nth-child(2){animation-delay:0.1s}
-.leaderboard-item:nth-child(3){animation-delay:0.15s}
-.leaderboard-item:nth-child(4){animation-delay:0.2s}
-.leaderboard-item:nth-child(5){animation-delay:0.25s}
-
-@keyframes itemSlide{
-  from{opacity:0;transform:translateX(-30px)}
-  to{opacity:1;transform:translateX(0)}
-}
-
-.leaderboard-item:hover{
-  transform:translateX(10px) scale(1.02);
-  background:rgba(110,231,183,0.05);
-  border-color:rgba(110,231,183,0.2);
-  box-shadow:0 10px 30px rgba(110,231,183,0.1);
-}
-
-.rank{
-  font-size:28px;
-  font-weight:800;
-  min-width:50px;
-  text-align:center;
-}
-
-.rank.gold{
-  background:linear-gradient(135deg,#ffd700,#ffed4e);
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-}
-
-.rank.silver{
-  background:linear-gradient(135deg,#c0c0c0,#e8e8e8);
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-}
-
-.rank.bronze{
-  background:linear-gradient(135deg,#cd7f32,#e89758);
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-}
-
-.user-info{
-  flex:1;
-}
-
-.username{
-  font-size:18px;
+footer strong{
+  color:var(--accent);
   font-weight:700;
-  color:#fff;
-  margin-bottom:5px;
 }
 
-.user-stats{
-  font-size:14px;
-  color:#8b92a8;
-}
-
-.user-value{
-  font-size:24px;
-  font-weight:800;
+/* Toast Notification */
+.toast{
+  position:fixed;
+  bottom:30px;
+  right:30px;
   background:linear-gradient(135deg,#6ee7b7,#7cc0ff);
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
+  color:#042;
+  padding:20px 30px;
+  border-radius:16px;
+  font-weight:600;
+  box-shadow:0 10px 40px rgba(110,231,183,0.6);
+  transform:translateY(150px);
+  opacity:0;
+  transition:all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  z-index:1000;
+  display:flex;
+  align-items:center;
+  gap:12px;
 }
 
-.loading{
-  text-align:center;
-  padding:40px;
-  color:#8b92a8;
-  font-size:18px;
+.toast.show{
+  transform:translateY(0);
+  opacity:1;
 }
 
-.loading::after{
-  content:'...';
-  animation:dots 1.5s infinite;
-}
-
-@keyframes dots{
-  0%,20%{content:'.'}
-  40%{content:'..'}
-  60%,100%{content:'...'}
+.toast::before{
+  content:'✅';
+  font-size:24px;
 }
 
 /* Responsive */
 @media(max-width:768px){
-  .hero h1{font-size:36px}
-  .nav-links{gap:15px;font-size:14px}
-  .commands-grid{grid-template-columns:1fr}
-  .section-header h2{font-size:28px}
+  h1{font-size:28px}
+  .logo{width:70px;height:70px;font-size:24px}
+  header{flex-direction:column;text-align:center}
+  .features{grid-template-columns:1fr}
+  .btn-container{flex-direction:column}
+  .btn{width:100%}
 }
 </style>
 </head>
 <body>
 <div class="bg-animation"></div>
 
-<nav>
-  <div class="nav-container">
-    <div class="logo-nav">🌟 OrionX</div>
-    <ul class="nav-links">
-      <li><a href="#home" class="active">Trang chủ</a></li>
-      <li><a href="#commands">Lệnh</a></li>
-      <li><a href="#leaderboard">Bảng xếp hạng</a></li>
-      <li><a href="https://discord.com/oauth2/authorize?client_id=1432330183834075166" target="_blank">Invite Bot</a></li>
-    </ul>
-  </div>
-</nav>
-
-<div class="container">
-  <div class="hero" id="home">
-    <h1>OrionX Bot</h1>
-    <p>Bot AI Discord với hệ thống kinh tế, pet và minigame</p>
-    <div class="status-badge" id="botStatus">
-      <div class="status-dot"></div>
-      <span>Đang kiểm tra...</span>
-    </div>
-  </div>
-
-  <div class="section" id="commands">
-    <div class="section-header">
-      <span class="section-icon">🎮</span>
-      <h2>Danh sách lệnh</h2>
-    </div>
-    <div class="commands-grid">
-      <div class="command-category">
-        <div class="category-header">
-          <span class="category-icon">💰</span>
-          <h3 class="category-title">Kiếm tiền</h3>
-        </div>
-        <p class="category-desc">Các lệnh để kiếm tiền và tăng balance</p>
-        <div class="command-list">
-          <span class="command-tag">xwork</span>
-          <span class="command-tag">xdaily</span>
-          <span class="command-tag">xhunt</span>
-        </div>
-      </div>
-
-      <div class="command-category">
-        <div class="category-header">
-          <span class="category-icon">🎮</span>
-          <h3 class="category-title">Trò chơi</h3>
-        </div>
-        <p class="category-desc">Minigames vui nhộn và cơ hội nhân đôi tiền</p>
-        <div class="command-list">
-          <span class="command-tag">x8ball</span>
-          <span class="command-tag">xcoinflip</span>
-          <span class="command-tag">xslot</span>
-          <span class="command-tag">xgamble</span>
-        </div>
-      </div>
-
-      <div class="command-category">
-        <div class="category-header">
-          <span class="category-icon">📊</span>
-          <h3 class="category-title">Thông tin</h3>
-        </div>
-        <p class="category-desc">Xem thông tin về bạn và người khác</p>
-        <div class="command-list">
-          <span class="command-tag">xbalance</span>
-          <span class="command-tag">xtop</span>
-          <span class="command-tag">xprofile</span>
-          <span class="command-tag">xstats</span>
-        </div>
-      </div>
-
-      <div class="command-category">
-        <div class="category-header">
-          <span class="category-icon">💸</span>
-          <h3 class="category-title">Giao dịch</h3>
-        </div>
-        <p class="category-desc">Trao đổi tiền và items với người chơi khác</p>
-        <div class="command-list">
-          <span class="command-tag">xgive</span>
-          <span class="command-tag">xtrade</span>
-          <span class="command-tag">xpay</span>
-        </div>
-      </div>
-
-      <div class="command-category">
-        <div class="category-header">
-          <span class="category-icon">🐾</span>
-          <h3 class="category-title">Pet System</h3>
-        </div>
-        <p class="category-desc">Nuôi và phát triển thú cưng của bạn</p>
-        <div class="command-list">
-          <span class="command-tag">xpet</span>
-          <span class="command-tag">xfeed</span>
-          <span class="command-tag">xfusion</span>
-          <span class="command-tag">xduel</span>
-        </div>
-      </div>
-
-      <div class="command-category">
-        <div class="category-header">
-          <span class="category-icon">📋</span>
-          <h3 class="category-title">Nhiệm vụ</h3>
-        </div>
-        <p class="category-desc">Hoàn thành quest để nhận thưởng</p>
-        <div class="command-list">
-          <span class="command-tag">xquest</span>
-          <span class="command-tag">xquestlist</span>
-          <span class="command-tag">xclaim</span>
-        </div>
+<div class="wrap">
+<header>
+  <div class="logo">OX</div>
+  <div>
+    <h1>OrionX</h1>
+    <p class="lead">Bot AI Discord bởi Team XYRON — Kinh tế, minigame, pet chất lượng cao</p>
+    <div class="hero-meta">
+      <div class="pill">Prefix: <code>X</code></div>
+      <div class="pill">
+        <a href="https://discord.gg/3AgHp9CXJP" target="_blank">Tham gia Server Support</a>
       </div>
     </div>
   </div>
+</header>
 
-  <div class="section" id="leaderboard">
-    <div class="section-header">
-      <span class="section-icon">🏆</span>
-      <h2>Bảng xếp hạng</h2>
+<section class="card">
+  <h3>🎮 Giới thiệu</h3>
+  <p class="muted">OrionX mang đến trải nghiệm vui nhộn với hệ thống trò chuyện AI của OpenAI và hệ thống minigame, hệ thống tiền ảo, pet, duel, leaderboard và shop chi tiết. Tất cả được thiết kế với hiệu ứng và animation sống động.</p>
+  <div class="btn-container">
+    <a href="https://discord.com/oauth2/authorize?client_id=1432330183834075166&permissions=2048&integration_type=0&scope=bot" target="_blank" class="btn" style="text-decoration:none">
+      <span>🚀 Invite Bot Ngay</span>
+    </a>
+    <button class="btn" id="btnCopy">
+      <span>📋 Sao chép Link Invite</span>
+    </button>
+  </div>
+</section>
+
+<section class="card">
+  <h3>✨ Tính năng nổi bật</h3>
+  <div class="features">
+    <div class="feature">
+      <strong>🤖 Chat AI</strong>
+      <div class="muted">Hệ thống trò chuyện AI cực kỳ thông minh có thể trả lời tất cả câu hỏi mà người dùng đưa ra bằng hệ thống OpenAI</div>
     </div>
-    <div class="leaderboard-container">
-      <div class="leaderboard-tabs">
-        <button class="tab-btn active" onclick="loadLeaderboard('balance')">💰 Giàu nhất</button>
-        <button class="tab-btn" onclick="loadLeaderboard('level')">⭐ Level cao nhất</button>
-        <button class="tab-btn" onclick="loadLeaderboard('pets')">🐾 Nhiều pet nhất</button>
-      </div>
-      <div class="leaderboard-list" id="leaderboardList">
-        <div class="loading">Đang tải dữ liệu</div>
-      </div>
+    <div class="feature">
+      <strong>💰 Hệ thống tiền tệ</strong>
+      <div class="muted">Shop, daily reward, inventory có hiệu ứng mở popup mượt mà</div>
+    </div>
+    <div class="feature">
+      <strong>🐾 Pets & Items</strong>
+      <div class="muted">Giao diện nuôi pet với animation hover và fusion</div>
+    </div>
+    <div class="feature">
+      <strong>📊 Leaderboard</strong>
+      <div class="muted">Hiển thị động và update bằng hiệu ứng fade slide</div>
     </div>
   </div>
+</section>
+
+<section class="card">
+  <h3>💡 Mẹo & Hướng dẫn</h3>
+  <ul class="muted">
+    <li>Tag bot để nhận trợ giúp nhanh</li>
+    <li>Dùng prefix <code>X</code> trước lệnh để bot nhận dạng</li>
+    <li>Tham gia server support để cập nhật tin tức và hỏi đáp</li>
+    <li>Khám phá minigame và shop để nhận thưởng hằng ngày</li>
+    <li>Thử các combo pet và duel để tối đa hóa điểm số</li>
+  </ul>
+</section>
+
+<footer>
+  OrionX © 2025 — Được phát triển bởi <strong>Team XYRON</strong>. Prefix: <strong>X</strong>.
+</footer>
 </div>
 
+<div class="toast" id="toast"></div>
+
 <script>
-// API URL - Thay đổi khi deploy backend
-const API_URL = 'http://localhost:3000/api';
-
-// Check bot status
-async function checkBotStatus() {
-  const statusEl = document.getElementById('botStatus');
-  try {
-    const res = await fetch(`${API_URL}/status`);
-    const data = await res.json();
-    
-    if(data.online) {
-      statusEl.innerHTML = '<div class="status-dot"></div><span>Bot đang Online ✅</span>';
-      statusEl.classList.remove('offline');
-    } else {
-      statusEl.innerHTML = '<div class="status-dot"></div><span>Bot Offline ⚠️</span>';
-      statusEl.classList.add('offline');
-    }
-  } catch(err) {
-    statusEl.innerHTML = '<div class="status-dot"></div><span>Không thể kết nối</span>';
-    statusEl.classList.add('offline');
-  }
+// Create floating particles
+for(let i=0;i<15;i++){
+  const particle = document.createElement('div');
+  particle.className = 'particle';
+  particle.style.width = Math.random()*60+20+'px';
+  particle.style.height = particle.style.width;
+  particle.style.left = Math.random()*100+'%';
+  particle.style.top = Math.random()*100+'%';
+  particle.style.background = `radial-gradient(circle, ${['rgba(110,231,183,0.3)','rgba(124,192,255,0.3)','rgba(244,114,182,0.3)'][Math.floor(Math.random()*3)]}, transparent)`;
+  particle.style.animationDelay = Math.random()*5+'s';
+  particle.style.animationDuration = (Math.random()*10+10)+'s';
+  document.body.appendChild(particle);
 }
 
-// Load leaderboard
-async function loadLeaderboard(type) {
-  const listEl = document.getElementById('leaderboardList');
-  listEl.innerHTML = '<div class="loading">Đang tải dữ liệu</div>';
-  
-  // Update active tab
-  document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-  event.target.classList.add('active');
-  
-  try {
-    const res = await fetch(`${API_URL}/leaderboard/${type}`);
-    const data = await res.json();
-    
-    if(data.length === 0) {
-      listEl.innerHTML = '<div class="loading">Chưa có dữ liệu</div>';
-      return;
-    }
-    
-    listEl.innerHTML = data.map((user, i) => {
-      const rankClass = i === 0 ? 'gold' : i === 1 ? 'silver' : i === 2 ? 'bronze' : '';
-      const rankEmoji = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : `#${i + 1}`;
-      
-      let valueText = '';
-      let statsText = '';
-      
-      if(type === 'balance') {
-        valueText = `${user.balance.toLocaleString()} 💰`;
-        statsText = `Level ${user.level} • ${user.pets.length} pets`;
-      } else if(type === 'level') {
-        valueText = `Level ${user.level}`;
-        statsText = `${user.xp} XP • ${user.balance.toLocaleString()} 💰`;
-      } else {
-        valueText = `${user.pets.length} pets`;
-        statsText = `Level ${user.level} • ${user.balance.toLocaleString()} 💰`;
-      }
-      
-      return `
-        <div class="leaderboard-item">
-          <div class="rank ${rankClass}">${rankEmoji}</div>
-          <div class="user-info">
-            <div class="username">User ${user.discordId.slice(0, 8)}...</div>
-            <div class="user-stats">${statsText}</div>
-          </div>
-          <div class="user-value">${valueText}</div>
-        </div>
-      `;
-    }).join('');
-    
-  } catch(err) {
-    listEl.innerHTML = '<div class="loading">Lỗi khi tải dữ liệu</div>';
-  }
-}
-
-// Smooth scroll
-document.querySelectorAll('a[href^="#"]').forEach(link => {
-  link.addEventListener('click', function(e) {
-    e.preventDefault();
-    const target = document.querySelector(this.getAttribute('href'));
-    target.scrollIntoView({ behavior: 'smooth' });
-    
-    document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
-    this.classList.add('active');
+// Copy button functionality
+document.getElementById('btnCopy').addEventListener('click', function() {
+  const link = 'https://discord.com/oauth2/authorize?client_id=1432330183834075166';
+  navigator.clipboard.writeText(link).then(() => {
+    showToast('✅ Đã sao chép link invite của OrionX!');
   });
 });
 
-// Init
-checkBotStatus();
-loadLeaderboard('balance');
-setInterval(checkBotStatus, 30000); // Check every 30s
+function showToast(message) {
+  const toast = document.getElementById('toast');
+  toast.textContent = message;
+  toast.classList.add('show');
+  setTimeout(() => {
+    toast.classList.remove('show');
+  }, 3000);
+}
+
+// Add hover sound effect simulation
+document.querySelectorAll('.btn, .feature, .card').forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    el.style.transition = 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)';
+  });
+});
 </script>
 </body>
 </html>
