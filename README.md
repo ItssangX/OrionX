@@ -8,7 +8,7 @@
 
 [![Discord](https://img.shields.io/badge/Discord-Server-5865F2?style=for-the-badge&logo=discord&logoColor=white)](https://discord.com/invite/3AgHp9CXJP)
 [![GitHub](https://img.shields.io/badge/GitHub-Open%20Source-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/ItssangX/OrionX)
-[![Owner](https://img.shields.io/badge/Made%20in-itssang-DA251D?style=for-the-badge)](https://github.com/ItssangX)
+[![Owner](https://img.shields.io/badge/Made%20in-itssang-DA251D?style=for-the-badge)](https://github.com/ItssangZ)
 
 <img src="https://raw.githubusercontent.com/ItssangX/OrionX/main/OrionX%20Banner%20GIf.gif" width="600" alt="OrionX Banner"/>
 
